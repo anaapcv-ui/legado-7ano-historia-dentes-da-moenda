@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dentes da Moenda · História 7º ano</title>
+<style>
+:root{--fumaca:#141A1C;--carvao:#1B2326;--carvao2:#25302F;--borda:#38474A;--brasa:#5FA8D6;--brasa2:#93CDEB;
+--melaco:#8FD37E;--cana:#6FD15C;--tijolo:#E05A50;--alerta:#E8C06A;--areia:#EDF2EF;--areia2:#A9BAB6;
+--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--fumaca);color:var(--areia);font-family:var(--sans);line-height:1.6;font-size:17px}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px 80px}
+header.top{background:
+ radial-gradient(1100px 380px at 12% -10%,rgba(95,168,214,.24),transparent 62%),
+ linear-gradient(160deg,#17323F,#121A1C 72%);
+ border-bottom:3px solid var(--brasa);padding:40px 0 30px}
+header.top .wrap{padding-bottom:0}
+.sel{display:inline-block;font-size:11.5px;letter-spacing:.17em;text-transform:uppercase;font-weight:800;
+ background:var(--brasa);color:#0E1A1E;border-radius:999px;padding:5px 13px}
+h1{font-family:var(--serif);font-size:40px;line-height:1.08;margin:14px 0 8px}
+h1 small{display:block;font-family:var(--sans);font-size:14px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--melaco);font-weight:700;margin-bottom:8px}
+.lead{color:var(--areia2);font-size:16.5px;max-width:640px;margin:0}
+.caps{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.caps span{font-size:13.5px;border:1px solid var(--borda);background:rgba(0,0,0,.25);border-radius:10px;padding:8px 13px}
+.caps b{color:var(--brasa2)}
+h2.sec{font-family:var(--serif);font-size:24px;margin:36px 0 10px;color:var(--brasa2)}
+h2.sec small{display:block;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--melaco);font-weight:700;margin-bottom:3px}
+.cards{display:grid;gap:13px}
+a.card{display:block;text-decoration:none;color:inherit;background:var(--carvao);border:1px solid var(--borda);
+ border-left:5px solid var(--brasa);border-radius:16px;padding:17px 18px;transition:border-color .2s,transform .12s}
+a.card:hover{border-color:var(--brasa);transform:translateY(-2px)}
+a.card .ord{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--melaco);font-weight:800}
+a.card h3{font-family:var(--serif);font-size:21px;margin:5px 0 5px}
+a.card p{margin:0;font-size:15px;color:var(--areia2)}
+a.card .meta{margin-top:9px;font-size:12.5px;color:var(--brasa2);font-weight:700}
+a.card.c2{border-left-color:var(--azul,#6BA8E0)}
+a.card.c3{border-left-color:var(--melaco)}
+a.card.c4{border-left-color:var(--cana)}
+.caixa{background:var(--carvao);border:1px solid var(--borda);border-radius:16px;padding:18px;margin:14px 0}
+ol.usar{counter-reset:u;list-style:none;padding:0;margin:0}
+ol.usar li{counter-increment:u;position:relative;padding:11px 0 11px 42px;border-top:1px solid #243031;font-size:15.3px}
+ol.usar li:first-child{border-top:none}
+ol.usar li::before{content:counter(u);position:absolute;left:0;top:11px;width:28px;height:28px;border-radius:50%;
+ background:var(--brasa);color:#0E1A1E;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+ol.usar b{color:var(--brasa2)}
+table.cron{width:100%;border-collapse:collapse;font-size:14.6px}
+table.cron th,table.cron td{padding:9px 7px;border-bottom:1px solid #243031;text-align:left;vertical-align:top}
+table.cron th{color:var(--melaco);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase}
+table.cron td:first-child{white-space:nowrap;font-weight:700;color:var(--brasa2);width:120px}
+.dicapais{background:rgba(143,211,126,.09);border:1px solid var(--melaco);border-radius:14px;padding:16px 18px;margin:14px 0}
+.dicapais h4{margin:0 0 7px;font-size:15px;color:var(--melaco);letter-spacing:.06em;text-transform:uppercase}
+.dicapais p{margin:0;font-size:15px}
+.btn{cursor:pointer;border-radius:10px;border:1px solid var(--borda);background:var(--carvao2);color:var(--areia);
+ padding:10px 15px;font-size:14px;font-weight:600;font-family:inherit}
+.btn.primary{background:var(--brasa);color:#0E1A1E;border-color:var(--brasa)}
+.btn:hover{border-color:var(--brasa)}
+.trava{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.trava input{background:#121A1C;border:1px solid var(--borda);color:var(--areia);border-radius:10px;padding:10px 12px;
+ font-family:ui-monospace,Menlo,Consolas,monospace;font-size:16px;width:170px;text-align:center;text-transform:uppercase}
+#rel{display:none;margin-top:16px}
+.relbloco{background:var(--carvao2);border:1px solid var(--borda);border-radius:13px;padding:14px;margin:11px 0}
+.relbloco h4{margin:0 0 8px;font-size:16px;color:var(--brasa2);font-family:var(--serif)}
+.relbloco .linha{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-top:1px dashed #2e251c;font-size:14.6px}
+.relbloco .linha:first-of-type{border-top:none}
+.relbloco .linha b{color:var(--areia)}
+.relbloco ul{margin:9px 0 0;padding-left:18px;font-size:14px;color:var(--areia2)}
+.vazio{font-size:14.5px;color:var(--areia2)}
+.pill{font-size:12px;font-weight:800;border-radius:999px;padding:2px 10px}
+.pill.ok{background:rgba(111,209,92,.18);color:var(--cana);border:1px solid var(--cana)}
+.pill.rev{background:rgba(232,192,106,.15);color:var(--alerta);border:1px solid var(--alerta)}
+.pill.off{background:#232d2e;color:var(--areia2);border:1px solid var(--borda)}
+.rodape{margin-top:34px;padding-top:18px;border-top:1px solid var(--borda);font-size:13.5px;color:var(--areia2)}
+@media(max-width:600px){h1{font-size:30px}body{font-size:16px}table.cron td:first-child{width:auto}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+ <span class="sel">História · 7º ano</span>
+ <h1><small>Kit de estudos · Dentes da Moenda</small>A moenda que esmaga e os dentes que quebram</h1>
+ <p class="lead">A colônia funcionava como uma moenda: a cana entrava de um lado e o açúcar saía do outro, esmagando gente no caminho. Quatro materiais para estudar sozinho os capítulos 08 e 09 — e, no fim, os dentes do cilindro que quebraram. Tudo sai direto das páginas do livro indicadas no conteúdo da prova.</p>
+ <div class="caps">
+  <span><b>Capítulo 08</b> — Economia e sociedade colonial · p. 44 a 58, 68, 70 a 73</span>
+  <span><b>Capítulo 09</b> — Resistência, trabalho e mercadoria no período colonial · p. 78 a 104, 106 a 108</span>
+ </div>
+</div></header>
+
+<div class="wrap">
+
+ <h2 class="sec"><small>Na ordem certa</small>Os materiais do kit</h2>
+ <div class="cards">
+  <a class="card" href="leitura.html">
+   <div class="ord">Material 1</div><h3>📖 Leitura Guiada</h3>
+   <p>O conteúdo dos dois capítulos em 10 blocos curtos. Em cada bloco, 3 perguntas para escrever com as próprias palavras, com resposta modelo e autoavaliação logo depois.</p>
+   <div class="meta">10 blocos · 30 perguntas escritas · pegadinhas e tabela de cobertura no fim</div></a>
+  <a class="card c2" href="quiz.html">
+   <div class="ord">Material 2</div><h3>🎯 Quiz</h3>
+   <p>Testa o que ficou da leitura enquanto o assunto está fresco. Gabarito comentado: explica por que a certa é a certa e por que cada errada está errada.</p>
+   <div class="meta">15 questões · código de liberação MED-XX-YY</div></a>
+  <a class="card c3" href="resumo.html">
+   <div class="ord">Material 3</div><h3>🗺️ Resumo</h3>
+   <p>Fecha exatamente as lacunas que o Quiz mostrou: linha do tempo, 12 cartas para virar, quadros comparativos, post-its de pegadinha e glossário.</p>
+   <div class="meta">Revisão de véspera · leitura rápida no celular</div></a>
+  <a class="card c4" href="simulado.html">
+   <div class="ord">Material 4</div><h3>📝 Simulado</h3>
+   <p>No formato da avaliação: 22 de múltipla escolha, 3 de números romanos, 2 de somatório e 1 discursiva com resposta modelo para o adulto corrigir.</p>
+   <div class="meta">28 questões · código de liberação SIM-XX-YY</div></a>
+ </div>
+
+ <h2 class="sec"><small>Passo a passo</small>Como usar este material</h2>
+ <div class="caixa"><ol class="usar">
+  <li>Comece pela <b>📖 Leitura Guiada</b>. Leia o bloco e responda as 3 perguntas escrevendo. Se a resposta sair igual ao texto, a página avisa: reescreva com as suas palavras, mesmo que fique mais curto.</li>
+  <li>Em seguida vá para o <b>🎯 Quiz</b>, ainda com o assunto fresco. Ao terminar aparece o código MED. Guarde esse código.</li>
+  <li>Use o <b>🗺️ Resumo</b> para fechar o que o Quiz mostrou que faltava. As cartas e os quadros comparativos são os melhores para revisar na véspera.</li>
+  <li>Só então faça o <b>📝 Simulado</b>, valendo. Ao entregar aparece o código SIM e, com ele, o gabarito comentado de todas as questões.</li>
+  <li>Entregue os dois códigos ao adulto responsável: eles abrem o <b>📊 Relatório para os pais</b>, aqui embaixo nesta mesma página.</li>
+ </ol></div>
+
+ <h2 class="sec"><small>Sugestão</small>Cronograma de 4 dias</h2>
+ <div class="caixa"><table class="cron">
+  <thead><tr><th>Quando</th><th>O que fazer</th><th>Tempo</th></tr></thead>
+  <tbody>
+   <tr><td>Dia 1</td><td>📖 Leitura Guiada, blocos 1 a 5 (capítulo 08: açúcar, engenho e mão de obra)</td><td>~40 min</td></tr>
+   <tr><td>Dia 2</td><td>📖 Leitura Guiada, blocos 6 a 10 (sociedade, Igreja e capítulo 09) + 🎯 Quiz</td><td>~50 min</td></tr>
+   <tr><td>Dia 3</td><td>🗺️ Resumo inteiro, com atenção aos quadros comparativos e aos post-its de pegadinha</td><td>~25 min</td></tr>
+   <tr><td>Véspera</td><td>📝 Simulado completo e leitura do gabarito comentado das questões erradas</td><td>~50 min</td></tr>
+  </tbody></table></div>
+
+ <div class="dicapais">
+  <h4>💡 Dica para o adulto</h4>
+  <p>Nesta prova, dois pontos derrubam quase todo mundo: confundir <b>quem produzia</b> o açúcar com <b>quem lucrava</b> com ele, e achar que os quilombos eram esconderijos isolados que queriam acabar com a escravidão. Se sobrar pouco tempo, peça para o jovem aprendiz explicar esses dois pontos em voz alta, com as próprias palavras. A discursiva do Simulado cobra exatamente o segundo ponto.</p>
+ </div>
+
+ <h2 class="sec"><small>Área protegida</small>📊 Relatório para os pais</h2>
+ <div class="caixa">
+  <p style="margin:0 0 4px;font-size:15px;color:var(--areia2)">Digite o código <b>MED</b> do Quiz, o código <b>SIM</b> do Simulado ou o código fixo da família <b>PAIS-77</b>.</p>
+  <div class="trava">
+   <input id="inCod" placeholder="PAIS-77" maxlength="12">
+   <button class="btn primary" id="bAbrir">Abrir relatório</button>
+   <span class="vazio" id="erro" style="color:var(--tijolo)"></span>
+  </div>
+  <div id="rel"></div>
+ </div>
+
+ <div class="rodape">
+  Kit de estudos “Dentes da Moenda” · conteúdo retirado das páginas do livro indicadas no escopo da avaliação (capítulos 08 e 09).
+  Os materiais funcionam no celular e no computador e guardam o progresso no próprio aparelho.
+ </div>
+</div>
+
+<script>
+/* metadados minimos dos materiais, para o relatorio ler o progresso salvo */
+var META={
+ leitura:{chave:"dm_hist7_leitura_v1",blocos:[
+  {id:"b1",n:1,t:"Por que logo o açúcar?"},{id:"b2",n:2,t:"Quem pagou a conta e quem ficou com o lucro"},
+  {id:"b3",n:3,t:"De São Vicente para Pernambuco e Bahia"},{id:"b4",n:4,t:"Os quatro espaços do engenho"},
+  {id:"b5",n:5,t:"Da mão de obra indígena à africana"},{id:"b6",n:6,t:"A sociedade colonial"},
+  {id:"b7",n:7,t:"A Igreja Católica na colonização"},{id:"b8",n:8,t:"A captura dos povos indígenas e as leis"},
+  {id:"b9",n:9,t:"Condições de vida e de trabalho"},{id:"b10",n:10,t:"Resistência, quilombos e Palmares"}],
+  porBloco:3},
+ quiz:{chave:"dm_hist7_quiz_v1",total:15},
+ resumo:{chave:"dm_hist7_resumo_v1",cartas:12},
+ simulado:{chave:"dm_hist7_simulado_v1",objetivas:27,discursivas:["s28"]}
+};
+function ler(c){try{var s=localStorage.getItem(c);return s?JSON.parse(s):null;}catch(e){return null;}}
+function dataBr(q){ if(!q) return "—"; var d=new Date(q);
+ return d.toLocaleDateString("pt-BR")+" às "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}); }
+function linha(rot,val){ return '<div class="linha"><span>'+rot+'</span><b>'+val+'</b></div>'; }
+
+function montarRelatorio(){
+ var alvo=document.getElementById("rel"); var h="";
+
+ /* --- Leitura Guiada --- */
+ var L=ler(META.leitura.chave);
+ h+='<div class="relbloco"><h4>📖 Leitura Guiada</h4>';
+ if(!L){ h+='<div class="vazio">Ainda não foi aberta neste aparelho.</div>'; }
+ else{
+  var feitos=0,vermelhas=[],naos=[];
+  META.leitura.blocos.forEach(function(b){
+   if(L.blocos&&L.blocos[b.id]&&L.blocos[b.id].feito) feitos++;
+   for(var i=0;i<META.leitura.porBloco;i++){
+    var r=(L.respostas||{})[b.id+"-q"+i]; if(!r) continue;
+    if(r.transcrita) vermelhas.push("Bloco "+b.n+" ("+b.t+"), pergunta "+(i+1));
+    var c=r.chk||{}; var qn=0; for(var k in c){ if(c[k]==="nao") qn++; }
+    if(qn) naos.push("Bloco "+b.n+" ("+b.t+"), pergunta "+(i+1)+": "+qn+" ponto(s) marcado(s) como «não»");
+   }
+  });
+  h+=linha("Blocos conferidos",feitos+" de "+META.leitura.blocos.length);
+  h+=linha("Respostas marcadas em vermelho (muito parecidas com o texto)",vermelhas.length);
+  h+=linha("Pontos da autoavaliação marcados como «não»",naos.length);
+  h+=linha("Último registro",dataBr(L.quando));
+  if(vermelhas.length) h+='<ul><li><b>Para reescrever com palavras próprias:</b></li>'+vermelhas.map(function(t){return "<li>"+t+"</li>";}).join("")+'</ul>';
+  if(naos.length) h+='<ul><li><b>Para retomar no livro:</b></li>'+naos.map(function(t){return "<li>"+t+"</li>";}).join("")+'</ul>';
+  if(!vermelhas.length&&!naos.length&&feitos) h+='<ul><li>Nenhum ponto pendente até aqui.</li></ul>';
+ }
+ h+='</div>';
+
+ /* --- Quiz --- */
+ var Q=ler(META.quiz.chave);
+ h+='<div class="relbloco"><h4>🎯 Quiz</h4>';
+ if(!Q||!Q.fim){ h+='<div class="vazio">'+(Q?"Começado, mas ainda não finalizado.":"Ainda não foi aberto neste aparelho.")+'</div>';
+  if(Q){ h+=linha("Questões já respondidas",Object.keys(Q.resp||{}).length+" de "+META.quiz.total); } }
+ else{
+  var ac=0; /* o acerto fica salvo no proprio quiz pelo codigo MED-XX */
+  if(Q.codigo){ var m=/^MED-(\d\d)-/.exec(Q.codigo); if(m) ac=parseInt(m[1],10); }
+  h+=linha("Acertos",ac+" de "+META.quiz.total+" ("+Math.round(ac/META.quiz.total*100)+"%)");
+  h+=linha("Código de liberação",Q.codigo||"—");
+  h+=linha("Gabarito já aberto",Q.liberado?'<span class="pill ok">sim</span>':'<span class="pill off">ainda não</span>');
+  h+=linha("Último registro",dataBr(Q.quando));
+ }
+ h+='</div>';
+
+ /* --- Resumo --- */
+ var R=ler(META.resumo.chave);
+ h+='<div class="relbloco"><h4>🗺️ Resumo</h4>';
+ if(!R){ h+='<div class="vazio">Ainda não foi aberto neste aparelho.</div>'; }
+ else{
+  var rol=R.rolagem||0, cart=Object.keys(R.viradas||{}).length;
+  h+=linha("Quanto da página foi percorrido",rol+"%"+(rol>=90?' <span class="pill ok">leu até o fim</span>':rol>=50?' <span class="pill rev">leu metade</span>':' <span class="pill rev">leu pouco</span>'));
+  h+=linha("Cartas abertas",cart+" de "+META.resumo.cartas);
+  h+=linha("Último registro",dataBr(R.quando));
+ }
+ h+='</div>';
+
+ /* --- Simulado --- */
+ var S=ler(META.simulado.chave);
+ h+='<div class="relbloco"><h4>📝 Simulado</h4>';
+ if(!S||!S.fim){ h+='<div class="vazio">'+(S?"Começado, mas ainda não entregue.":"Ainda não foi aberto neste aparelho.")+'</div>';
+  if(S){ h+=linha("Questões já respondidas",Object.keys(S.resp||{}).length+" de 28"); } }
+ else{
+  var ac2=0; if(S.codigo){ var m2=/^SIM-(\d\d)-/.exec(S.codigo); if(m2) ac2=parseInt(m2[1],10); }
+  h+=linha("Acertos nas objetivas",ac2+" de "+META.simulado.objetivas+" ("+Math.round(ac2/META.simulado.objetivas*100)+"%)");
+  h+=linha("Código de liberação",S.codigo||"—");
+  h+=linha("Gabarito já aberto",S.liberado?'<span class="pill ok">sim</span>':'<span class="pill off">ainda não</span>');
+  var dis=0; META.simulado.discursivas.forEach(function(k){ if(S.resp&&S.resp[k]&&(""+S.resp[k]).trim().length>=10) dis++; });
+  h+=linha("Discursiva respondida (corrigir à mão)",dis+" de 1");
+  h+=linha("Último registro",dataBr(S.quando));
+  if(dis) h+='<ul><li>A resposta da discursiva aparece no próprio Simulado, com a resposta modelo ao lado, depois que o código SIM for digitado lá.</li></ul>';
+ }
+ h+='</div>';
+
+ h+='<div class="vazio" style="margin-top:10px">O relatório mostra apenas o que foi feito <b>neste aparelho</b>. Se o jovem aprendiz estudou no celular e no computador, abra o relatório nos dois.</div>';
+ alvo.innerHTML=h; alvo.style.display="block";
+}
+
+document.getElementById("bAbrir").onclick=function(){
+ var v=(document.getElementById("inCod").value||"").trim().toUpperCase();
+ var Q=ler(META.quiz.chave), S=ler(META.simulado.chave);
+ var ok = (v==="PAIS-77") || (Q&&Q.codigo&&v===Q.codigo) || (S&&S.codigo&&v===S.codigo);
+ if(ok){ document.getElementById("erro").textContent=""; montarRelatorio(); }
+ else document.getElementById("erro").textContent="Código não confere.";
+};
+document.getElementById("inCod").addEventListener("keydown",function(e){ if(e.key==="Enter") document.getElementById("bAbrir").click(); });
+</script>
+</body>
+</html>

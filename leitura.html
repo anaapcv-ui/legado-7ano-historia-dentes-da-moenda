@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leitura Guiada · Dentes da Moenda</title>
+<style>
+:root{
+  --fumaca:#141A1C; --carvao:#1B2326; --carvao2:#25302F; --borda:#38474A;
+  --brasa:#5FA8D6; --brasa2:#93CDEB; --melaco:#8FD37E;
+  --cana:#6FD15C; --tijolo:#E05A50; --alerta:#E8C06A;
+  --areia:#EDF2EF; --areia2:#A9BAB6;
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--fumaca);color:var(--areia);font-family:var(--sans);line-height:1.65;font-size:17px}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px 80px}
+header.top{background:linear-gradient(160deg,#17301F,#111A1A 72%);border-bottom:5px solid var(--melaco);padding:26px 0 20px}
+header.top .wrap{padding-bottom:0}
+.kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--melaco);font-weight:700}
+h1{font-family:var(--serif);font-size:30px;line-height:1.15;margin:8px 0 6px}
+.sub{color:var(--areia2);font-size:15px;margin:0}
+.navbar{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0;list-style:none}
+.navbar a{display:inline-block;padding:7px 13px;border-radius:999px;border:1px solid var(--borda);
+  background:var(--carvao);color:var(--areia2);text-decoration:none;font-size:13px;font-weight:600}
+.navbar a.on{background:var(--melaco);color:#0E1A1E;border-color:var(--melaco)}
+.painel{background:var(--carvao);border:1px solid var(--borda);border-radius:14px;padding:14px;margin:20px 0;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.painel .saved{font-size:13px;color:var(--areia2)}
+.btn{cursor:pointer;border-radius:10px;border:1px solid var(--borda);background:var(--carvao2);color:var(--areia);
+  padding:9px 14px;font-size:14px;font-weight:600;font-family:inherit}
+.btn:hover{border-color:var(--brasa)}
+.btn.primary{background:var(--melaco);color:#0E1A1E;border-color:var(--melaco)}
+.btn.primary:disabled{background:#3d4a4c;color:#8d9b99;border-color:#3d4a4c;cursor:not-allowed}
+.btn.ghost{background:transparent}
+.progresso{height:9px;background:#22303a;border-radius:999px;overflow:hidden;margin:14px 0 0}
+.progresso i{display:block;height:100%;background:linear-gradient(90deg,var(--melaco),var(--cana));width:0%;transition:width .4s}
+.bloco{background:var(--carvao);border:1px solid var(--borda);border-radius:16px;margin:18px 0;overflow:hidden}
+.bloco.trancado{opacity:.55}
+.bloco > .cab{padding:16px 18px;border-left:5px solid var(--melaco);background:var(--carvao2)}
+.bloco .etapa{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--melaco);font-weight:700}
+.bloco h2{font-family:var(--serif);font-size:21px;margin:6px 0 2px}
+.bloco .pag{font-size:12px;color:var(--areia2)}
+.bloco .corpo{padding:4px 18px 18px}
+.bloco p.tx{margin:14px 0}
+.bloco p.tx b{color:var(--brasa2)}
+.cadeado{padding:18px;color:var(--areia2);font-size:14px}
+.badge{float:right;font-size:12px;padding:3px 10px;border-radius:999px;font-weight:700}
+.badge.ok{background:rgba(111,209,92,.18);color:var(--cana);border:1px solid var(--cana)}
+.badge.rev{background:rgba(232,192,106,.15);color:var(--alerta);border:1px solid var(--alerta)}
+.perg{border-top:1px dashed var(--borda);padding:16px 0 4px;margin-top:10px}
+.perg.vermelha{border-left:4px solid var(--tijolo);padding-left:12px;background:rgba(224,90,80,.07);border-radius:0 10px 10px 0}
+.perg .num{font-size:12px;color:var(--melaco);font-weight:700;letter-spacing:.1em}
+.perg .enun{margin:6px 0 10px;font-weight:600}
+textarea{width:100%;min-height:92px;background:#121A1C;color:var(--areia);border:1px solid var(--borda);
+  border-radius:10px;padding:11px;font-family:inherit;font-size:16px;line-height:1.55;resize:vertical}
+textarea:focus{outline:none;border-color:var(--brasa)}
+.aviso{margin-top:9px;border-radius:10px;padding:11px 13px;font-size:14px;display:none}
+.aviso.amarelo{display:block;background:rgba(232,192,106,.12);border:1px solid var(--alerta);color:#F3DFAA}
+.aviso.vermelho{display:block;background:rgba(224,90,80,.12);border:1px solid var(--tijolo);color:#F6BDB7}
+.modelo{display:none;margin-top:11px;background:rgba(111,209,92,.08);border:1px solid rgba(111,209,92,.45);
+  border-radius:10px;padding:12px 14px;font-size:15px}
+.modelo.ver{display:block}
+.modelo .rot{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--cana);font-weight:700;margin-bottom:5px}
+.chk{margin-top:11px;background:#141D1F;border:1px solid var(--borda);border-radius:10px;padding:12px 14px;display:none}
+.chk.ver{display:block}
+.chk .rot{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--melaco);font-weight:700;margin-bottom:8px}
+.chk .item{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:7px 0;border-top:1px solid #243031}
+.chk .item:first-of-type{border-top:none}
+.chk .item span{flex:1;font-size:14.5px}
+.chk .item .opts{display:flex;gap:6px;flex:0 0 auto}
+.mini{cursor:pointer;border:1px solid var(--borda);background:var(--carvao2);color:var(--areia2);
+  border-radius:8px;padding:5px 11px;font-size:13px;font-weight:700;font-family:inherit}
+.mini.sim.on{background:var(--cana);color:#0f1f0e;border-color:var(--cana)}
+.mini.nao.on{background:var(--tijolo);color:#2a0d0a;border-color:var(--tijolo)}
+.acoes{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.dica{font-size:13px;color:var(--areia2)}
+.caixa{background:var(--carvao);border:1px solid var(--borda);border-radius:16px;padding:18px;margin:22px 0}
+.caixa h3{font-family:var(--serif);margin:0 0 10px;font-size:20px;color:var(--brasa2)}
+.pega{counter-reset:p;list-style:none;padding:0;margin:0}
+.pega li{counter-increment:p;position:relative;padding:10px 0 10px 40px;border-top:1px solid #243031;font-size:15px}
+.pega li:first-child{border-top:none}
+.pega li::before{content:counter(p);position:absolute;left:0;top:10px;width:26px;height:26px;border-radius:50%;
+  background:var(--alerta);color:#231a05;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+table.cob{width:100%;border-collapse:collapse;font-size:14px}
+table.cob th,table.cob td{text-align:left;padding:8px 6px;border-bottom:1px solid #243031;vertical-align:top}
+table.cob th{color:var(--melaco);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.revisar li{padding:8px 0;border-top:1px solid #243031;font-size:14.5px}
+.revisar{list-style:none;padding:0;margin:0}
+.rodape{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:26px;
+  padding-top:18px;border-top:1px solid var(--borda);font-size:14px;color:var(--areia2)}
+.rodape a{color:var(--brasa);text-decoration:none;font-weight:700}
+.modal{position:fixed;inset:0;background:rgba(6,10,12,.84);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal.ver{display:flex}
+.modal .cx{background:var(--carvao);border:1px solid var(--borda);border-radius:16px;max-width:520px;width:100%;padding:20px}
+.modal h3{font-family:var(--serif);margin:0 0 8px;font-size:20px}
+.modal p{font-size:15px;color:var(--areia2)}
+.modal textarea{min-height:120px;font-size:13px}
+.modal .fim{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+@media(max-width:560px){h1{font-size:24px}body{font-size:16px}.bloco .corpo{padding:4px 14px 16px}.bloco>.cab{padding:14px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="kicker">Dentes da Moenda · História · 7º ano</div>
+  <h1>📖 Leitura Guiada</h1>
+  <p class="sub">Capítulo 08 — Economia e sociedade colonial · Capítulo 09 — Resistência, trabalho e mercadoria no período colonial</p>
+  <ul class="navbar">
+    <li><a class="on" href="leitura.html">1 · 📖 Leitura Guiada</a></li>
+    <li><a href="quiz.html">2 · 🎯 Quiz</a></li>
+    <li><a href="resumo.html">3 · 🗺️ Resumo</a></li>
+    <li><a href="simulado.html">4 · 📝 Simulado</a></li>
+    <li><a href="index.html">🏠 Início</a></li>
+  </ul>
+  <div class="progresso"><i id="barra"></i></div>
+</div></header>
+
+<div class="wrap">
+  <div class="painel">
+    <div class="saved" id="saved">Nada salvo ainda.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn ghost" id="bExp">📥 Exportar</button>
+      <button class="btn ghost" id="bImp">📤 Importar</button>
+      <button class="btn ghost" id="bZero">🗑️ Zerar tudo</button>
+    </div>
+  </div>
+
+  <div class="caixa" style="border-left:5px solid var(--melaco)">
+    <h3>Como funciona</h3>
+    <p style="margin:0;font-size:15px">Leia o bloco e responda as <b>3 perguntas escrevendo com as suas palavras</b>. O botão <b>Conferir</b> só libera quando as três estiverem preenchidas. Depois de conferir aparecem a resposta modelo e uma pequena autoavaliação, e o próximo bloco se abre. Respostas copiadas do texto são avisadas: reescreva com palavras suas, mesmo que fique mais curto — o que vale é ser seu.</p>
+  </div>
+
+  <div id="blocos"></div>
+
+  <div class="caixa" id="boxRevisar" style="display:none;border-left:5px solid var(--tijolo)">
+    <h3>🔁 Para revisar antes da prova</h3>
+    <ul class="revisar" id="listaRevisar"></ul>
+  </div>
+
+  <div class="caixa">
+    <h3>⚠️ As 10 pegadinhas desta prova</h3>
+    <ol class="pega" id="pegadinhas"></ol>
+  </div>
+
+  <div class="caixa">
+    <h3>🧭 Tópico → Bloco (cobertura dos dois capítulos)</h3>
+    <table class="cob"><thead><tr><th>Tópico do livro</th><th>Onde está</th><th>Página</th></tr></thead>
+    <tbody id="cobertura"></tbody></table>
+  </div>
+
+  <div class="rodape">
+    <span>Terminou a leitura? O próximo material é o Quiz.</span>
+    <a href="quiz.html">Ir para o 🎯 Quiz →</a>
+  </div>
+</div>
+
+<div class="modal" id="modal"><div class="cx">
+  <h3 id="mTit"></h3>
+  <p id="mTxt"></p>
+  <textarea id="mArea" style="display:none"></textarea>
+  <div class="fim" id="mFim"></div>
+</div></div>
+
+<script>
+/* Dados da Leitura Guiada — Historia 7o ano, cap. 08 e 09 (livro Bernoulli)
+   Fonte: paginas fotografadas 44-58, 68-73 (cap.8) e 78-108 (cap.9). */
+const BLOCOS = [
+{
+  id:"b1", num:1, etapa:"Moenda · o motor da colônia",
+  titulo:"Por que logo o açúcar?",
+  paginas:"p. 44",
+  texto:[
+    "Quando os portugueses chegaram ao litoral brasileiro, não encontraram ouro nem prata. Sem metais preciosos, a colonização só valeria a pena se alguma atividade desse lucro. No começo do século XVI a escolha foi a produção de açúcar extraído da cana. Essa opção duraria até o século XVIII, e o maior centro produtor foi o Nordeste.",
+    "O primeiro fator que explica a escolha é a <b>demanda europeia</b>. O açúcar era um produto de luxo e tinha grande procura na Europa. Por isso o alto custo de produção era compensado pelo alto preço de revenda.",
+    "O segundo é a <b>geografia</b>. Os rios facilitavam o escoamento do açúcar até os portos do litoral do Nordeste, principalmente em Pernambuco e na Bahia. Além disso, a proximidade com a Europa encurtava as viagens e o tempo de revenda.",
+    "O terceiro são as <b>condições naturais</b>: o solo massapê e o clima úmido e quente do litoral das atuais regiões Nordeste e Sudeste eram ideais para a canavicultura. O quarto é a <b>experiência anterior</b>: os portugueses já praticavam a canavicultura e produziam açúcar havia quase um século nas Ilhas da Madeira, nos Açores e em Cabo Verde, e por isso possuíam técnica e experiência na atividade."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Explique por que o alto custo de produção do açúcar não impedia que ele fosse um bom negócio para Portugal.",
+      modelo:"Porque o açúcar era um produto de luxo e tinha grande procura na Europa. Como o preço de revenda era muito alto, o lucro cobria o custo elevado da produção e ainda sobrava ganho.",
+      chk:["Minha resposta disse que o açúcar era um produto de luxo e muito procurado na Europa?","Minha resposta disse que o preço alto de revenda compensava o custo de produção?"] },
+    { tipo:"aplicacao",
+      enunciado:"Imagine um grupo de colonos que quer montar um engenho bem no interior, longe de qualquer rio e longe do litoral. Usando os fatores do capítulo, aponte DOIS problemas que esse grupo teria.",
+      modelo:"Sem rio por perto, o escoamento do açúcar até o porto ficaria muito difícil e caro. Longe do litoral, a viagem até a Europa demoraria mais e o tempo de revenda aumentaria. Além disso, fora da faixa litorânea provavelmente não haveria o solo massapê nem o clima úmido e quente ideais para a cana.",
+      chk:["Citei o problema do transporte ou do escoamento sem rio?","Citei a distância do porto, do litoral ou da Europa?","Usei fatores que estão no capítulo e não ideias inventadas?"] },
+    { tipo:"aplicacao",
+      enunciado:"Um colega disse: «Portugal escolheu o açúcar por sorte, foi a primeira coisa que apareceu». Escreva, com as suas palavras, uma resposta que mostre que a escolha foi planejada.",
+      modelo:"Não foi sorte. Portugal já sabia produzir açúcar havia quase um século nas ilhas da Madeira, dos Açores e de Cabo Verde, então tinha técnica pronta. Sabia também que o açúcar era caro e muito procurado na Europa, e escolheu uma região com solo e clima bons e com rios que levavam a carga até os portos.",
+      chk:["Citei a experiência anterior dos portugueses nas ilhas?","Citei pelo menos mais um fator planejado (demanda, solo e clima ou geografia)?","Escrevi com as minhas palavras, como se estivesse explicando para o colega?"] }
+  ]
+},
+{
+  id:"b2", num:2, etapa:"Moenda · o motor da colônia",
+  titulo:"Quem pagou a conta e quem ficou com o lucro",
+  paginas:"p. 44 e 45",
+  texto:[
+    "Para iniciar a produção, a Coroa portuguesa atribuiu a função e, principalmente, os altíssimos custos aos <b>capitães donatários</b>, que receberam vastas terras para cultivo em forma das <b>capitanias hereditárias</b>.",
+    "Com esse arranjo a Coroa promoveu o povoamento da colônia, consolidou a posse da terra e garantiu a lucratividade da colonização através de <b>impostos sobre a comercialização</b>. Em resumo: quem pagava a conta da montagem era o donatário; quem lucrava com segurança era a Coroa.",
+    "A venda do açúcar, entretanto, era feita por <b>comerciantes holandeses</b>. Eles obtiveram esse direito porque, assim como os donatários, também arcaram com os custos da implantação da canavicultura, e foram responsáveis por refinar, transportar, comercializar e distribuir o açúcar.",
+    "Os holandeses eram ainda comerciantes experientes: já estavam presentes nos maiores centros comerciais do Ocidente europeu e possuíam navios velozes. Desse modo, grande parte do lucro da produção açucareira ficou com os comerciantes holandeses. O livro registra que somente os lucros da refinação alcançaram, aproximadamente, a terça parte do valor do açúcar bruto."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Explique por que a Coroa portuguesa preferiu entregar aos donatários a função e os custos de montar a produção.",
+      modelo:"Porque assim a Coroa conseguia povoar a colônia e firmar a posse da terra sem gastar do próprio bolso. Os donatários assumiam o risco e o custo, e a Coroa garantia lucro cobrando impostos sobre a comercialização.",
+      chk:["Minha resposta disse que o custo e o risco ficavam com os donatários?","Minha resposta disse que a Coroa lucrava com impostos sobre a comercialização?","Citei o povoamento ou a posse da terra como ganho da Coroa?"] },
+    { tipo:"aplicacao",
+      enunciado:"Monte um exemplo seu: um senhor de engenho vende uma carga de açúcar bruto. Descreva o caminho dessa carga até virar dinheiro na Europa e diga em qual etapa o lucro é maior e por quê.",
+      modelo:"O senhor de engenho produz o açúcar bruto e entrega a carga ao comerciante holandês. Ele transporta em navios velozes, refina o açúcar, distribui e vende nos grandes centros comerciais europeus. O lucro maior está nessa etapa, porque só a refinação rendia cerca de um terço do valor do açúcar bruto e porque quem controla o transporte e a venda define o preço final.",
+      chk:["Descrevi a sequência produção, transporte, refinação e venda?","Apontei a etapa do comerciante holandês como a mais lucrativa?","Justifiquei com um dado ou argumento do texto, e não só com opinião?"] },
+    { tipo:"aplicacao",
+      enunciado:"Explique para um colega mais novo, em poucas linhas e sem copiar o texto, a frase: «o açúcar era feito aqui, mas o lucro ia para a Holanda».",
+      modelo:"Aqui a gente plantava a cana e fazia o açúcar, que era a parte pesada e cara. Mas quem levava o açúcar nos navios, limpava ele e vendia nas lojas da Europa eram os holandeses, e é nessa parte que entra mais dinheiro. Então o trabalho ficava na colônia e boa parte do ganho ficava com eles.",
+      chk:["Usei palavras simples, de explicar para alguém mais novo?","Deixei claro que o trabalho pesado ficava na colônia?","Deixei claro que o transporte, a refinação e a venda eram dos holandeses?"] }
+  ]
+},
+{
+  id:"b3", num:3, etapa:"Moenda · o motor da colônia",
+  titulo:"De São Vicente para Pernambuco e Bahia",
+  paginas:"p. 45",
+  texto:[
+    "O primeiro engenho de açúcar foi organizado na capitania de <b>São Vicente</b>, no atual litoral de São Paulo, pelo capitão donatário <b>Martim Afonso de Sousa, em 1532</b>. Em sua expedição vieram as primeiras mudas de cana e também portugueses, italianos e flamengos (grupo étnico holandês) com experiência na manufatura do açúcar.",
+    "Porém São Vicente sofreria invasões e perderia sua importância para o Nordeste. Ali a lavoura desenvolveu-se predominantemente no litoral, <b>entre Salvador e Natal</b>, sendo <b>Pernambuco e Bahia</b> os grandes centros açucareiros.",
+    "O mapa do capítulo mostra o tamanho desse deslocamento. Até <b>1580</b> existiam mais de <b>100 engenhos</b> no litoral brasileiro, produzindo <b>350 mil arrobas</b> (aproximadamente 5 250 toneladas) de açúcar por ano. A região de Pernambuco concentrava 66 engenhos e a da Bahia, 36, enquanto as capitanias do Sudeste e do Sul somavam poucas unidades cada uma."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Diga onde e quando foi montado o primeiro engenho e explique por que essa região não se tornou o centro da economia açucareira.",
+      modelo:"O primeiro engenho foi montado na capitania de São Vicente, no atual litoral paulista, em 1532, pelo capitão donatário Martim Afonso de Sousa. São Vicente não virou o centro porque sofreu invasões e perdeu importância para o Nordeste, onde Pernambuco e Bahia reuniam a maior parte dos engenhos.",
+      chk:["Citei São Vicente e o ano de 1532?","Expliquei que a região perdeu importância para o Nordeste?"] },
+    { tipo:"aplicacao",
+      enunciado:"Observando os números do mapa (66 engenhos em Pernambuco, 36 na Bahia e poucas unidades nas capitanias do Sul e Sudeste), escreva uma conclusão sua sobre como a produção de açúcar estava distribuída no território. Não repita os números: diga o que eles mostram.",
+      modelo:"Os números mostram que a produção estava muito concentrada numa faixa estreita do litoral nordestino. A maior parte dos engenhos ficava em duas regiões vizinhas, enquanto o resto da costa tinha pouquíssimas unidades. Isso indica que o açúcar não se espalhou pela colônia: ele criou um polo econômico no Nordeste e deixou as outras capitanias em segundo plano.",
+      chk:["Afirmei que a produção era concentrada e não espalhada?","Liguei essa concentração ao litoral do Nordeste?","Tirei uma conclusão própria em vez de repetir os números?"] },
+    { tipo:"aplicacao",
+      enunciado:"Um aluno escreveu na prova: «O primeiro engenho do Brasil foi em Pernambuco». Corrija a frase dele e explique de onde provavelmente veio a confusão.",
+      modelo:"A frase está errada: o primeiro engenho foi em São Vicente, em 1532. A confusão vem de Pernambuco ter se tornado o maior centro açucareiro, com 66 engenhos até 1580. Ser o lugar mais importante não é o mesmo que ser o primeiro lugar.",
+      chk:["Corrigi dizendo que o primeiro foi São Vicente?","Expliquei que Pernambuco era o maior centro, e não o primeiro?"] }
+  ]
+},
+{
+  id:"b4", num:4, etapa:"Engenho · por dentro",
+  titulo:"Os quatro espaços do engenho",
+  paginas:"p. 46",
+  texto:[
+    "O <b>engenho</b> era a unidade produtora da economia colonial. A partir dele eram organizadas a rotina dos moradores e a estrutura social das lavouras de cana. Os engenhos ocuparam grandes propriedades, causando enorme desigualdade na distribuição de terras que ainda se reflete na sociedade atual.",
+    "A <b>casa-grande</b> era a residência do senhor, de sua família, de seus agregados e de seus subordinados. Era também o centro administrativo do engenho.",
+    "A <b>senzala</b> era o local onde eram aprisionados os escravizados, em péssimas condições de higiene, para as poucas horas de repouso a que tinham direito. A <b>capela</b> era o lugar reservado à celebração das missas e de outros serviços religiosos, como batismos, casamentos e enterros; era um importante centro de convívio, principalmente aos domingos e dias santos.",
+    "A <b>casa de engenho</b> reunia as instalações destinadas ao preparo do açúcar: a <b>casa da moenda</b>, as <b>fornalhas</b> e a <b>casa de purgar</b>. Era o coração industrial da propriedade, e foi essa combinação de lavoura e beneficiamento que transformou o engenho numa atividade agroindustrial sofisticada."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Diga qual era a função da casa-grande e qual era a função da casa de engenho, mostrando a diferença entre as duas.",
+      modelo:"A casa-grande era a moradia do senhor, da família, dos agregados e dos subordinados, e funcionava também como centro administrativo. A casa de engenho era a parte de produção, com a casa da moenda, as fornalhas e a casa de purgar, onde o açúcar era de fato preparado. Uma é o espaço de morar e mandar, a outra é o espaço de produzir.",
+      chk:["Expliquei a casa-grande como moradia e centro administrativo?","Expliquei a casa de engenho como local de preparo do açúcar?","Citei pelo menos uma das instalações (moenda, fornalhas ou casa de purgar)?"] },
+    { tipo:"aplicacao",
+      enunciado:"Um engenho qualquer, numa quarta-feira comum: escreva um pequeno roteiro dizendo em qual espaço cada cena aconteceria. (a) o senhor confere as contas da safra; (b) o caldo da cana é fervido; (c) um casamento é celebrado; (d) os escravizados são trancados ao fim do dia.",
+      modelo:"(a) casa-grande, porque era o centro administrativo. (b) casa de engenho, nas fornalhas. (c) capela, onde aconteciam casamentos, batizados e enterros. (d) senzala, local onde os escravizados eram aprisionados nas poucas horas de repouso.",
+      chk:["Liguei cada uma das quatro cenas ao espaço certo?","Justifiquei pelo menos uma das escolhas com a função do espaço?"] },
+    { tipo:"aplicacao",
+      enunciado:"O texto diz que os engenhos ocuparam grandes propriedades e causaram uma desigualdade na distribuição de terras que ainda se reflete hoje. Explique essa frase com as suas palavras e dê um exemplo do Brasil de hoje em que isso aparece.",
+      modelo:"Quer dizer que a terra, desde a colônia, ficou concentrada nas mãos de poucos donos de grandes propriedades, e essa divisão desigual não foi desfeita depois. Hoje isso aparece, por exemplo, em regiões onde enormes fazendas de um só dono convivem com muitas famílias sem terra ou com lotes pequenos demais para viver.",
+      chk:["Expliquei que a terra ficou concentrada em poucas mãos?","Liguei a situação colonial a uma situação atual?","Usei um exemplo próprio em vez de repetir a frase do texto?"] }
+  ]
+},
+{
+  id:"b5", num:5, etapa:"Engenho · por dentro",
+  titulo:"Da mão de obra indígena à africana",
+  paginas:"p. 50, 51, 52 e 70",
+  texto:[
+    "No início da canavicultura, os engenhos empregaram a mão de obra da população indígena. Os nativos eram chamados pelos portugueses de <b>«negros da terra»</b> ou <b>«negros brasis»</b>; como os povos do litoral faziam trocas de pau-brasil com os portugueses, eram também chamados de <b>«brasileiros»</b>.",
+    "Com a colonização a partir de 1530 iniciou-se a escravização de nativos, pois o colono português rejeitava o trabalho manual e desejava ser senhor e enriquecer rapidamente. Essa escravização indígena foi longa: os paulistas, por exemplo, comportaram-se até o século XVIII como aprisionadores de índios no planalto de Piratininga.",
+    "A escravidão indígena, porém, era dificultada por quatro fatores: a <b>diferença cultural</b> (os nativos eram adeptos da agricultura de subsistência e consideravam desnecessária a produção de excedentes para fins comerciais); a <b>oposição dos jesuítas</b>, que desejavam catequizar os nativos; a <b>dispersão de doenças</b> trazidas pelo colonizador, como a varíola; e as <b>fugas constantes</b>, facilitadas pelo conhecimento do território por parte dos indígenas.",
+    "A Coroa buscou então outra mão de obra: a escravização de africanos, com o desenvolvimento do comércio de cativos. Os fatores que contribuíram foram o <b>domínio da produção</b> de açúcar por africanos, o <b>lucro do comércio</b> de escravizados, a <b>experiência anterior</b> dos portugueses com a escravização de africanos e as <b>feitorias e colônias portuguesas na África</b>, que facilitavam a compra de cativos.",
+    "A troca foi <b>gradual</b>, não repentina. No engenho Sergipe do Conde, na Bahia, os africanos representavam apenas 7% da força de trabalho escrava em 1574; em 1591 eram 37%; e em torno de 1638 africanos e afro-brasileiros compunham a totalidade da força de trabalho. A transição levou cerca de meio século, e em fins do século XVI a mão de obra dos engenhos ainda era mista. A abolição no Brasil só ocorreria em <b>1888</b>."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Apresente dois fatores que dificultaram a escravização indígena e explique por que cada um atrapalhava os colonos.",
+      modelo:"As fugas constantes atrapalhavam porque os indígenas conheciam muito bem o território e conseguiam escapar com facilidade. A diferença cultural também atrapalhava, porque os nativos praticavam agricultura de subsistência e não viam sentido em produzir excedente para vender. Também servem a oposição dos jesuítas, que queriam catequizar, e as doenças trazidas pelo colonizador, como a varíola, que reduziam a população.",
+      chk:["Citei dois fatores corretos do capítulo?","Expliquei por que cada um atrapalhava os colonos?"] },
+    { tipo:"aplicacao",
+      enunciado:"Usando os números do engenho Sergipe do Conde (7% em 1574, 37% em 1591, totalidade por volta de 1638), explique para um colega por que está errado dizer que «de uma hora para outra os africanos substituíram os indígenas».",
+      modelo:"Os números mostram uma troca lenta. Em 1574 os africanos eram menos de um décimo da força de trabalho; dezessete anos depois ainda eram pouco mais de um terço; e só perto de 1638, mais de sessenta anos depois, passaram a ser todos. Durante esse tempo todo o trabalho nos engenhos foi misto, com indígenas e africanos juntos.",
+      chk:["Mostrei que a mudança levou décadas?","Disse que durante a transição a mão de obra era mista?","Usei os dados para provar a conclusão, e não só para repeti-los?"] },
+    { tipo:"aplicacao",
+      enunciado:"Um texto de jornal afirma: «na colonização brasileira só houve escravidão africana». Escreva uma crítica a essa afirmação usando o que você leu no bloco.",
+      modelo:"A afirmação está errada. Os indígenas foram escravizados desde o início da colonização e por muito tempo: os paulistas aprisionavam e vendiam índios até o século XVIII. A escravidão africana cresceu depois e se tornou a principal, mas não apagou a escravidão indígena, que veio antes e conviveu com ela.",
+      chk:["Afirmei claramente que houve escravidão indígena?","Usei a duração dela (até o século XVIII) ou outro dado do texto?","Expliquei que a africana se tornou principal, mas não foi a única?"] }
+  ]
+},
+{
+  id:"b6", num:6, etapa:"Casa de purgar · o que decanta",
+  titulo:"A sociedade colonial",
+  paginas:"p. 53",
+  texto:[
+    "A sociedade colonial portuguesa na América era essencialmente <b>agrária</b>, e a vida desenvolveu-se predominantemente no interior, em torno dos engenhos e das grandes plantações. A maior parte da população fixou-se em áreas rurais por depender da terra, e essa organização agroexportadora resultou na menor importância de cidades e vilas.",
+    "As grandes cidades eram majoritariamente <b>litorâneas</b> — São Luís, Recife, Olinda, Salvador — pois serviam como portos exportadores ou para a defesa da costa. Tinham pequenas populações comparadas ao campo, e a maioria de seus habitantes eram comerciantes e funcionários públicos.",
+    "A divisão social da sociedade açucareira aparece numa pirâmide. No topo, os <b>senhores de engenho</b>: homens brancos, proprietários de engenhos e de escravizados, que eram a minoria da população. No meio, a <b>classe intermediária</b>: mestiços (mulatos), funcionários domésticos no engenho, políticos locais, feitores (capatazes), fazendeiros com menores propriedades e produção local, comerciantes e artesãos. Na base, os <b>escravizados</b>: em sua maioria africanos negros e, ocasionalmente, indígenas — e eram a maioria da população.",
+    "Com o comércio de escravizados surgiu um importante setor da elite, formado por comerciantes enriquecidos do Rio de Janeiro e de Salvador. Esse grupo conseguiu ascender social e politicamente e conquistou grande participação nas <b>Câmaras Municipais</b>, influenciando fortemente a política colonial. Para além desses comerciantes, a sociedade colonial <b>não permitia mobilidade social</b>: a ascensão e a mudança na qualidade de vida eram extremamente reduzidas."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Explique o que significa dizer que a sociedade colonial «não permitia mobilidade social» e aponte a única exceção citada no capítulo.",
+      modelo:"Significa que uma pessoa nascia numa camada social e praticamente morria nela: subir de posição ou melhorar muito de vida era quase impossível. A exceção foram os comerciantes de escravizados enriquecidos do Rio de Janeiro e de Salvador, que ascenderam social e politicamente e ganharam espaço nas Câmaras Municipais.",
+      chk:["Expliquei mobilidade social como a possibilidade de mudar de posição?","Citei os comerciantes de escravizados como exceção?","Citei a participação deles nas Câmaras Municipais ou na política?"] },
+    { tipo:"aplicacao",
+      enunciado:"Classifique cada personagem a seguir na pirâmide social e justifique: (a) um feitor que vigia o trabalho na lavoura; (b) um artesão que faz ferramentas na vila; (c) o dono de dois engenhos; (d) um africano escravizado na moenda.",
+      modelo:"(a) classe intermediária, porque os feitores ou capatazes aparecem nesse grupo. (b) classe intermediária, porque os artesãos estão nessa camada. (c) topo, senhores de engenho, porque é proprietário de engenhos e de escravizados. (d) base, escravizados, maioria da população e em sua maioria africanos.",
+      chk:["Coloquei os quatro personagens na camada certa?","Justifiquei pelo menos duas das classificações?"] },
+    { tipo:"aplicacao",
+      enunciado:"O capítulo diz que a maioria da população estava na base da pirâmide e a minoria no topo. Escreva uma explicação sua sobre por que uma pirâmide é um bom desenho para representar essa sociedade — e diga que desenho seria ruim e por quê.",
+      modelo:"A pirâmide serve porque o desenho mostra de um jeito só duas coisas ao mesmo tempo: quem manda está em cima e é pouca gente, e quem é obrigado a trabalhar está embaixo e é muita gente. A largura de cada faixa já mostra o tamanho do grupo. Um desenho ruim seria uma lista ou um círculo dividido em partes iguais, porque daria a impressão de que os grupos tinham o mesmo tamanho e o mesmo poder.",
+      chk:["Expliquei que a pirâmide mostra poder e quantidade ao mesmo tempo?","Disse qual outro desenho seria ruim e por quê?","Escrevi uma explicação própria em vez de copiar o texto?"] }
+  ]
+},
+{
+  id:"b7", num:7, etapa:"Casa de purgar · o que decanta",
+  titulo:"A Igreja Católica na colonização",
+  paginas:"p. 56, 57 e 68",
+  texto:[
+    "A Igreja Católica esteve constantemente presente em todas as áreas sociais da colonização. Ela exercia o papel de regulamentar os costumes, a religião e a cultura na colônia, de modo que é impossível diminuir sua responsabilidade na colonização portuguesa.",
+    "O clero católico foi um importante agente colonizador, pois: fiscalizou o comportamento moral dos colonos; catequizou indígenas; prestou assistência social em hospitais e assistência religiosa à população; realizou casamentos e batizados e enterrou os mortos; <b>registrou a posse das terras</b> nos arquivos das igrejas; e transmitiu a cultura europeia para os filhos dos colonos nas escolas.",
+    "A catequização de indígenas deu-se principalmente nas <b>missões jesuíticas</b>, com o objetivo de garantir a sujeição dos nativos à Igreja Católica e evitar a escravização pelos senhores. As missões tiveram grande importância no processo de colonização: São Miguel das Missões, por exemplo, pertencente aos Sete Povos das Missões, foi fundada em 1632 onde hoje é o Rio Grande do Sul.",
+    "Isso não significa, porém, que os jesuítas tivessem uma visão positiva dos nativos. José de Anchieta, missionário jesuíta que veio da Europa no século XVI, escreveu que «pouco se pode obter deles se a força do braço secular não acudir para domá-los». Os religiosos os viam como selvagens a serem domesticados. Além da catequização, os indígenas eram forçados ao trabalho na canavicultura, na extração de drogas do sertão e no plantio para a subsistência dos que ocupavam a missão.",
+    "As relações entre Igreja e Estado eram estreitas. A Igreja executava tarefas que hoje são do Estado, como o registro de nascimentos, mortes e casamentos, e mantinha hospitais, principalmente as Santas Casas. Em contrapartida, o Estado nomeava bispos e párocos e concedia licenças à construção de novas igrejas."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Aponte três funções exercidas pelo clero católico na colonização e explique por que elas faziam da Igreja um agente colonizador, e não apenas uma instituição religiosa.",
+      modelo:"O clero catequizava indígenas, registrava a posse das terras nos arquivos das igrejas e transmitia a cultura europeia aos filhos dos colonos nas escolas. Também fiscalizava o comportamento moral dos colonos e cuidava de casamentos, batizados e enterros. Essas funções vão além do religioso porque organizavam a propriedade, a educação e o comportamento, que são tarefas de governo.",
+      chk:["Citei três funções corretas?","Expliquei que essas funções iam além do religioso?","Liguei alguma delas a uma tarefa de governo, como o registro de terras ou de nascimentos?"] },
+    { tipo:"aplicacao",
+      enunciado:"O capítulo mostra que os jesuítas defendiam os indígenas da escravização e, ao mesmo tempo, os viam como selvagens a serem domesticados. Explique essa contradição com as suas palavras, usando a frase de Anchieta como apoio.",
+      modelo:"Os jesuítas queriam os indígenas nas missões e não nos engenhos, então se opunham à escravização pelos senhores. Mas isso não era respeito pela cultura deles: Anchieta escreveu que pouco se obtinha dos índios sem a força do braço secular para domá-los, ou seja, os via como gente a ser domada. Nas missões eles perdiam suas crenças e costumes e também eram obrigados a trabalhar. Proteger do senhor de engenho não era o mesmo que aceitar o modo de vida indígena.",
+      chk:["Expliquei que a proteção era contra a escravização pelos senhores?","Mostrei que os jesuítas não respeitavam a cultura indígena?","Usei a frase de Anchieta ou o trabalho forçado na missão como prova?"] },
+    { tipo:"aplicacao",
+      enunciado:"Se a Igreja guardava nos arquivos das paróquias o registro de nascimentos, casamentos, mortes e da posse das terras, imagine um problema prático que um colono teria se brigasse com o padre da sua região. Escreva a sua resposta.",
+      modelo:"Ele ficaria numa situação difícil, porque todos os papéis que provavam a vida dele estavam na mão da Igreja. Sem acesso aos arquivos da paróquia, ficaria mais difícil provar que a terra era dele, que o filho era filho legítimo ou que um parente havia morrido. Quem controla o registro controla a prova, e isso dava à Igreja um poder bem concreto sobre os colonos.",
+      chk:["Mostrei que os documentos da vida civil ficavam com a Igreja?","Dei um problema prático concreto (terra, herança, casamento ou filiação)?","Concluí que isso dava poder à Igreja sobre o colono?"] }
+  ]
+},
+{
+  id:"b8", num:8, etapa:"Cilindro · quem é triturado",
+  titulo:"A captura dos povos indígenas e as leis",
+  paginas:"p. 78, 79, 80, 81 e 82",
+  texto:[
+    "Durante o Período Colonial brasileiro, o trabalho foi o alicerce sobre o qual se ergueu a economia da colônia — um sistema enraizado na exploração e na desigualdade, que moldou as relações sociais, econômicas e políticas da época.",
+    "Os donatários receberam, por meio da <b>Carta de Doação</b>, o direito de escravizar os indígenas. A partir de <b>1549</b>, com a chegada dos primeiros jesuítas, o modo como a escravização era praticada passou a ser questionado: enquanto os jesuítas defendiam que os indígenas fossem mantidos em aldeias comandadas por religiosos para serem catequizados, para os colonos os nativos deveriam servir de mão de obra. Para conciliar os dois interesses, a Coroa criou as <b>Aldeias Reais</b>, construídas próximas às áreas produtivas, administradas por religiosos e que serviam como depósito de mão de obra.",
+    "Havia três formas principais de captura. A <b>guerra justa</b> era praticada contra indígenas que resistissem à conversão católica ou que atacassem colonos; nesse caso os colonos estavam autorizados a invadir territórios indígenas para capturá-los, e os capturados podiam ser vendidos à Coroa ou a religiosos. O <b>resgate</b> ocorria quando uma população indígena fornecia aos colonizadores indígenas capturados que seriam submetidos a rituais antropofágicos, recebendo em troca produtos europeus como miçangas, ferramentas, adornos e armas. O <b>descimento</b> acontecia quando missionários visitavam pacificamente as aldeias e convenciam os nativos a «descer» de suas comunidades para viver em aldeamentos formados por religiosos, abandonando costumes, crenças e modo de vida.",
+    "As Aldeias Reais não foram suficientes para inibir o conflito, e as leis que proibiam a escravização não eram respeitadas com rigor. Os conflitos ficaram mais intensos quando surgiram as primeiras <b>bandeiras</b> na região do atual estado de São Paulo. Bandeiras eram expedições que reuniam colonos e partiam do litoral em direção ao interior em busca de metais e pedras preciosas ou de indígenas; já existiam desde as últimas décadas do século XVI e tornaram-se muito atuantes ao longo do <b>século XVII</b>. Entre os séculos XVI e XVII a economia da Capitania de São Vicente estava distante da prosperidade nordestina, e o fracasso do açúcar fez a população dedicar-se a gêneros de subsistência como trigo, algodão, vinha e frutas — atividades em que os indígenas eram capturados e obrigados a trabalhar.",
+    "Os indígenas escravizados faziam serviços muito variados: limpeza de estradas, fontes e praças, construção de fortificações, igrejas e caminhos, trabalho como soldados, e ainda lavoura, mineração, caça, pesca, coleta e transporte de mercadorias.",
+    "A legislação mudou várias vezes. A <b>Lei de 1570</b> garantia o direito de liberdade aos indígenas e limitava a escravização aos casos de «guerra justa», devendo haver autorização do rei ou do Governador-Geral. A <b>reformulação dessa lei, feita em 1574</b>, regulava o cativeiro ilegal e colocava os indígenas sob tutela dos jesuítas. A <b>Lei de 1609</b> determinava que a liberdade dos índios fosse garantida pelo tribunal e que todos deveriam pagar pelo seu trabalho; mantinha o sistema de aldeamentos jesuítas, mas um magistrado escolhido pelo governador e pelo chanceler julgaria as disputas entre índios e brancos."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Explique a diferença entre guerra justa, resgate e descimento.",
+      modelo:"Na guerra justa os colonos eram autorizados a invadir territórios e capturar indígenas que resistissem à conversão ou atacassem colonos, e podiam vendê-los à Coroa ou a religiosos. No resgate, uma população indígena entregava aos colonizadores nativos capturados que seriam submetidos a rituais antropofágicos, recebendo em troca miçangas, ferramentas, adornos e armas. No descimento, missionários convenciam pacificamente os nativos a descer para aldeamentos religiosos, onde abandonavam costumes, crenças e modo de vida.",
+      chk:["Expliquei a guerra justa como captura autorizada por resistência ou ataque?","Expliquei o resgate como troca de cativos por produtos europeus?","Expliquei o descimento como convencimento por missionários?"] },
+    { tipo:"aplicacao",
+      enunciado:"Coloque as três leis em ordem no tempo e explique, com suas palavras, se a situação dos indígenas estava melhorando ou piorando no papel. Depois diga se isso valia na prática, usando uma informação do texto.",
+      modelo:"A ordem é: Lei de 1570, reformulação de 1574 e Lei de 1609. No papel a situação melhorava: em 1570 a liberdade virou regra e a escravização ficou limitada à guerra justa com autorização do rei ou do Governador-Geral; em 1574 o cativeiro ilegal passou a ser regulado e os indígenas ficaram sob tutela dos jesuítas; em 1609 a liberdade passou a ser garantida pelo tribunal e o trabalho deveria ser pago. Na prática não valia, porque o próprio texto diz que as leis que proibiam a escravização não eram respeitadas com rigor e que as bandeiras continuaram capturando nativos.",
+      chk:["Coloquei as três leis na ordem certa?","Mostrei que, no papel, a proteção ia aumentando?","Mostrei com uma informação do texto que na prática a lei não era cumprida?"] },
+    { tipo:"aplicacao",
+      enunciado:"Por que a Coroa portuguesa teria criado as Aldeias Reais em vez de simplesmente dar razão aos jesuítas ou aos colonos? Escreva a sua resposta considerando o interesse da própria Coroa.",
+      modelo:"Porque a Coroa dependia dos dois lados. Os colonos geravam a riqueza que ela taxava e queriam os indígenas como mão de obra; os jesuítas sustentavam a catequese e o controle religioso da colônia e queriam os indígenas nas aldeias. Escolher um lado faria a Coroa perder o outro, então ela criou um arranjo que servia aos dois: aldeias administradas por religiosos, perto das áreas produtivas, funcionando como depósito de mão de obra.",
+      chk:["Mostrei que a Coroa precisava dos colonos e dos jesuítas?","Expliquei a Aldeia Real como solução de meio-termo?","Citei que elas ficavam perto das áreas produtivas ou serviam de depósito de mão de obra?"] }
+  ]
+},
+{
+  id:"b9", num:9, etapa:"Cilindro · quem é triturado",
+  titulo:"Condições de vida e de trabalho",
+  paginas:"p. 82, 89 e 90",
+  texto:[
+    "Com o crescimento da produção de açúcar, a demanda por mão de obra aumentou substancialmente. A escravidão africana tornou-se o principal motor da economia colonial: milhares de africanos foram capturados em suas terras natais, transportados à força pelo Atlântico e submetidos a condições desumanas de trabalho nas plantações de cana e em diversas outras atividades econômicas.",
+    "Na colônia, as condições de vida dos escravizados eram marcadas pela violência, embora houvesse diferenças significativas entre o tratamento dado aos que trabalhavam no campo e aos dedicados ao trabalho doméstico ou urbano. A maior parte lidava com o trabalho pesado no campo, e a jornada podia chegar a <b>mais de vinte horas por dia</b>.",
+    "Nas fazendas de produção de açúcar o trabalho era extremamente penoso e perigoso. Eram frequentes os acidentes em que escravizados perdiam uma das mãos ou até mesmo um braço na moenda. O padre Antônio Vieira, em sermão de 1633, descreveu as caldeiras ferventes, o ruído das rodas e das cadeias e o calor como «uma semelhança de inferno».",
+    "A alimentação oferecida aos cativos era precária: nos domingos os escravizados deviam plantar para garantir o próprio sustento. As roupas eram simples e feitas com tecidos grosseiros — os homens que trabalhavam no campo usavam apenas uma espécie de calça até abaixo dos joelhos; as mulheres vestiam saia, anágua, blusa e corpete. Os escravizados domésticos normalmente andavam mais bem vestidos, portando colete e chapéu.",
+    "Os <b>escravizados urbanos</b> eram menos numerosos e, normalmente, menos vigiados: deslocavam-se pelas ruas dos centros urbanos e trabalhavam em inúmeras atividades, como carpinteiros, alfaiates, ferreiros, carroceiros, barbeiros, pedreiros, pintores, estivadores, costureiros, escultores e músicos. As mulheres podiam trabalhar como cozinheiras, amas, arrumadeiras, lavadeiras, domésticas ou vendedoras de doces, bolos, caldo de cana, mingaus e iguarias de origem africana.",
+    "Uma modalidade comum de escravidão urbana foi a <b>escravidão de ganho</b>: o escravizado exercia alguma atividade que lhe garantisse ganho financeiro, e parte desse ganho deveria ser entregue ao senhor ao fim da jornada. Em muitos centros urbanos da capitania de Minas Gerais foi comum a circulação das «negras de tabuleiro». Como o valor cobrado pelo senhor era elevado, o escravizado de ganho ficava sujeito a longas jornadas para conseguir pagá-lo.",
+    "Possuir escravizados no Brasil não foi privilégio apenas de grandes proprietários de terras. Como o trabalho braçal carregava um significado negativo e possuir cativos garantia <i>status</i> ao sujeito, o esforço para possuir cativos foi muito comum na colônia: comerciantes, militares, artesãos, pequenos lavradores, funcionários públicos, donos de tabernas e até mesmo libertos possuíam escravizados."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Explique o que era a escravidão de ganho e por que ela não significava liberdade.",
+      modelo:"Era a modalidade urbana em que o escravizado exercia uma atividade que lhe dava ganho financeiro e tinha de entregar parte desse ganho ao senhor ao fim da jornada. Não era liberdade porque ele continuava sendo propriedade de alguém, e como o valor cobrado pelo senhor era elevado, precisava trabalhar jornadas longuíssimas só para conseguir pagar.",
+      chk:["Expliquei que o escravizado ganhava dinheiro e entregava parte ao senhor?","Expliquei que ele continuava escravizado?","Citei o valor elevado cobrado ou as longas jornadas?"] },
+    { tipo:"aplicacao",
+      enunciado:"Compare, com as suas palavras, o dia de um escravizado no engenho e o de um escravizado de ganho na cidade. Aponte uma diferença real e um ponto em que a situação dos dois era igual.",
+      modelo:"No engenho a jornada podia passar de vinte horas, o trabalho era pesadíssimo e perigoso, com risco de perder uma mão ou um braço na moenda, e a vigilância era constante. Na cidade o escravizado de ganho circulava pelas ruas, era menos vigiado e exercia um ofício. A diferença real é o grau de vigilância e o tipo de trabalho. O que era igual é que nenhum dos dois era dono de si: ambos pertenciam a um senhor e trabalhavam para o ganho dele.",
+      chk:["Descrevi uma diferença concreta entre os dois (vigilância, tipo de trabalho ou jornada)?","Mostrei um ponto em que a condição dos dois era a mesma?","Escrevi com as minhas palavras em vez de copiar as listas do texto?"] },
+    { tipo:"aplicacao",
+      enunciado:"O texto diz que até pequenos lavradores, donos de tabernas e libertos possuíam escravizados. Explique o que esse fato revela sobre a sociedade colonial — e cuidado: a resposta não é «todo mundo era rico».",
+      modelo:"Revela que a escravidão não era só um negócio dos grandes senhores, mas um valor espalhado pela sociedade inteira. Como o trabalho braçal era visto como coisa humilhante, ter um cativo dava status a quem não tinha riqueza nenhuma. Por isso gente pobre e até pessoas que haviam sido escravizadas se esforçavam para comprar escravizados: era assim que se mostrava que não se estava no último degrau.",
+      chk:["Expliquei que a escravidão estava espalhada por toda a sociedade, não só na elite?","Citei o status ou o significado negativo do trabalho braçal?","Evitei a conclusão errada de que todos eram ricos?"] }
+  ]
+},
+{
+  id:"b10", num:10, etapa:"Dentes quebrados · a resistência",
+  titulo:"Resistência, quilombos e Palmares",
+  paginas:"p. 92, 93, 94, 96, 100, 101 e 104",
+  texto:[
+    "A resistência cotidiana dos escravizados ocorria de formas variadas: pequenos atos de rebeldia, pequenos furtos, algazarras, fugas temporárias e até mesmo a tentativa de preservar arranjos familiares. A luta pela preservação das tradições afro-brasileiras e a insistência em conservar a prática de festividades africanas também revelavam resistência à opressão.",
+    "Além das formas cotidianas havia outras. As <b>insurreições</b> ou revoltas não foram tão frequentes quanto a organização de quilombos ou a fuga até eles; muitas tinham como objetivo exigir a devolução de direitos retirados pelos senhores, e havia também as que buscavam revelar a insatisfação dos cativos contra senhores ou feitores. A <b>desobediência</b> funcionava porque o senhor dependia da obediência e da disciplina dos trabalhadores para alcançar seus ganhos: desobedecer retirava do senhor parte de sua autoridade, e não eram raros os casos de escravizados que deixavam de executar tarefas ou as executavam apenas parcialmente.",
+    "A <b>sabotagem</b> também era comum: quebrar ferramentas, incendiar parte da lavoura, danificar um dente do cilindro que formava a moenda do engenho ou deixar um limão cortado nos tachos onde se cozinhava o caldo de cana para produzir melaço. Essas ações poderiam causar grande prejuízo aos senhores.",
+    "A <b>fuga</b> podia ser individual ou coletiva. Embora as coletivas fossem mais comuns, não eram raros os casos de fugas individuais em que os escravizados buscavam abrigo na residência de algum liberto ou pessoa livre conhecida; os que fugiam sozinhos também costumavam viajar para outra região ou, instalando-se em áreas periféricas das cidades, passavam-se por libertos. As fugas tinham como objetivo reivindicar melhores condições de trabalho e de sobrevivência, conservar direitos já adquiridos (por exemplo, o de realizar celebrações religiosas de origem africana) ou romper definitivamente com a relação de dominação imposta pelo senhor. Era comum que as fugas fossem comunicadas em jornais, com as características físicas do escravizado e a promessa de recompensa a quem oferecesse informações sobre seu paradeiro.",
+    "As fugas coletivas deram origem aos <b>quilombos</b>, povoações construídas em regiões de difícil acesso pelos que conseguiam escapar das senzalas. Também chamadas de <b>mocambos</b>, essas comunidades podiam reunir centenas ou até milhares de indivíduos. Embora os escravizados fugidos fossem a maior parte dos que as habitavam, elas também eram formadas por indígenas, comerciantes, soldados desertores ou procurados pela justiça.",
+    "Dois pontos costumam cair em prova. Primeiro: embora ficassem em locais protegidos, os quilombos <b>não se mantinham completamente isolados</b> — os quilombolas realizavam comércio com vilas e cidades próximas, recolhiam informações de moradores sobre o avanço de tropas e até mantinham relações de amizade com indivíduos dos arredores. Segundo: o <b>objetivo dos quilombos não era acabar com a escravidão</b>; seus moradores buscavam apenas viver livremente no seu interior. Justamente por representarem uma alternativa ao cativeiro, essas comunidades amedrontaram os senhores e as demais autoridades.",
+    "O <b>Quilombo dos Palmares</b>, na Serra da Barriga, no atual estado de Alagoas, foi o maior e o que por mais tempo existiu na colônia. Formado inicialmente por aproximadamente quarenta pessoas, chegou a possuir <b>20 mil habitantes</b>, que se dividiam em inúmeras comunidades menores — por isso o termo «Quilombo dos Palmares» era usado para designar um conjunto de comunidades de tamanhos variados. Palmares mostrou-se bastante organizado: possuía suas próprias leis, seu sistema de defesa militar, um governo organizado e tradições religiosas que fortaleciam a identidade de seus membros. Ao longo de quase cem anos resistiu a várias tentativas da Coroa portuguesa de destruir o local. Seus moradores realizavam comércio com vilas e arraiais próximos e também chegaram a realizar assaltos a povoações e fazendas da região.",
+    "Havia ainda o caminho da <b>alforria</b>, a carta de libertação. Mas, mesmo depois de forro, o antigo cativo andaria com um registro de sua carta pelo resto da vida, pois havia a possibilidade de ser escravizado novamente."
+  ],
+  perguntas:[
+    { tipo:"conceitual",
+      enunciado:"Apresente três formas de resistência dos escravizados citadas no capítulo e explique o que cada uma tirava do senhor.",
+      modelo:"A desobediência tirava do senhor parte de sua autoridade, porque ele dependia da obediência e da disciplina para ter ganho. A sabotagem, como quebrar ferramentas, incendiar a lavoura, danificar um dente do cilindro da moenda ou deixar um limão cortado nos tachos, tirava dinheiro, causando grande prejuízo. A fuga tirava a própria mão de obra e, quando coletiva, dava origem aos quilombos. Também valem as insurreições e a preservação das tradições e festividades africanas.",
+      chk:["Citei três formas corretas de resistência?","Expliquei o que cada uma tirava do senhor (autoridade, dinheiro ou mão de obra)?"] },
+    { tipo:"aplicacao",
+      enunciado:"Numa prova, um aluno escreveu: «os quilombos eram esconderijos isolados criados para acabar com a escravidão no Brasil». Reescreva essa frase corrigindo os DOIS erros, e explique cada correção.",
+      modelo:"A frase corrigida fica assim: os quilombos eram comunidades em regiões de difícil acesso onde os fugidos buscavam viver livremente. O primeiro erro é dizer que eram isolados: os quilombolas comerciavam com vilas e cidades próximas, recolhiam informações sobre o avanço de tropas e tinham amizades nos arredores. O segundo erro é o objetivo: eles não pretendiam acabar com a escravidão no país, queriam apenas viver livres dentro do quilombo. Mesmo assim amedrontavam os senhores, porque eram uma alternativa ao cativeiro.",
+      chk:["Corrigi o erro de dizer que eram isolados, com um exemplo de contato externo?","Corrigi o erro do objetivo, dizendo que queriam viver livremente no interior?","Reescrevi a frase, e não apenas apontei os erros?"] },
+    { tipo:"aplicacao",
+      enunciado:"Palmares tinha leis próprias, governo, defesa militar e tradições religiosas, e resistiu por quase cem anos. Explique, com as suas palavras, por que essas características faziam dele uma ameaça muito maior para a Coroa do que uma fuga individual.",
+      modelo:"Uma fuga individual tirava um trabalhador do engenho e podia ser resolvida com um anúncio no jornal e uma recompensa. Palmares era outra coisa: com leis, governo, exército e religião próprios, funcionava como uma sociedade inteira organizada fora do domínio português, e chegou a vinte mil habitantes. Isso mostrava a todos os cativos que existia um lugar possível fora do cativeiro, e por isso a Coroa tentou destruí-lo tantas vezes ao longo de quase um século.",
+      chk:["Comparei a fuga individual com um quilombo organizado?","Citei pelo menos duas características de Palmares (leis, governo, defesa, religião, tamanho)?","Expliquei por que isso assustava a Coroa e os senhores?"] }
+  ]
+}
+];
+
+const PEGADINHAS = [
+ "Quem produzia o açúcar era a colônia, mas quem refinava, transportava e mais lucrava eram os comerciantes holandeses. Maior produtor não é a mesma coisa que maior lucro.",
+ "O primeiro engenho foi em São Vicente, em 1532, mas o grande centro açucareiro passou a ser o Nordeste, com Pernambuco e Bahia. Primeiro não é o mesmo que principal.",
+ "«Negros da terra» e «negros brasis» eram nomes que os portugueses davam aos indígenas, não aos africanos.",
+ "A escravidão indígena existiu e foi longa: os paulistas aprisionavam e vendiam índios até o século XVIII. Dizer que não houve escravidão indígena é erro de prova.",
+ "A troca da mão de obra indígena pela africana foi gradual, levou cerca de meio século, e em fins do século XVI a mão de obra dos engenhos ainda era mista.",
+ "Senzala não era «a casa dos trabalhadores»: era o local onde os escravizados eram aprisionados, em péssimas condições de higiene.",
+ "A «guerra justa» não era uma guerra qualquer: era a permissão legal para capturar indígenas que resistissem à conversão ou atacassem colonos, e dependia de autorização do rei ou do Governador-Geral.",
+ "Lei de 1570 limita a escravização; a reformulação de 1574 põe os indígenas sob tutela dos jesuítas; a Lei de 1609 declara os índios livres. Não troque as datas.",
+ "O objetivo dos quilombos não era acabar com a escravidão no Brasil: era viver livremente no interior deles.",
+ "Os quilombos não eram isolados: comerciavam com vilas e cidades próximas e recolhiam informações sobre o avanço de tropas."
+];
+
+const COBERTURA = [
+ ["Cap. 8 — Fatores da escolha do açúcar (demanda, geografia, solo e clima, experiência)","Bloco 1","p. 44"],
+ ["Cap. 8 — Capitanias hereditárias, donatários e impostos da Coroa","Bloco 2","p. 44 e 45"],
+ ["Cap. 8 — O papel dos comerciantes holandeses e a refinação","Bloco 2","p. 45 e 49"],
+ ["Cap. 8 — Primeiro engenho, São Vicente e o deslocamento para o Nordeste","Bloco 3","p. 45"],
+ ["Cap. 8 — Engenhos até 1580, arrobas e distribuição no mapa","Bloco 3","p. 45"],
+ ["Cap. 8 — Casa-grande, senzala, capela e casa de engenho","Bloco 4","p. 46"],
+ ["Cap. 8 — Mão de obra indígena, «negros da terra» e dificuldades da escravização","Bloco 5","p. 50 e 51"],
+ ["Cap. 8 — Fatores da escravização africana e a transição gradual","Bloco 5","p. 51, 52 e 70"],
+ ["Cap. 8 — Sociedade agrária, cidades litorâneas e a pirâmide social","Bloco 6","p. 53"],
+ ["Cap. 8 — Comerciantes de escravizados, Câmaras Municipais e mobilidade social","Bloco 6","p. 53"],
+ ["Cap. 8 — A Igreja como agente colonizador e as missões jesuíticas","Bloco 7","p. 56 e 57"],
+ ["Cap. 8 — Relação Igreja e Estado, registros e Santas Casas","Bloco 7","p. 68"],
+ ["Cap. 9 — Carta de Doação, jesuítas (1549) e Aldeias Reais","Bloco 8","p. 78"],
+ ["Cap. 9 — Guerra justa, resgate e descimento","Bloco 8","p. 78"],
+ ["Cap. 9 — Bandeiras, São Vicente e gêneros de subsistência","Bloco 8","p. 79 e 80"],
+ ["Cap. 9 — Trabalhos dos indígenas escravizados e as leis de 1570, 1574 e 1609","Bloco 8","p. 81 e 82"],
+ ["Cap. 9 — Escravização africana como motor da economia colonial","Bloco 9","p. 82"],
+ ["Cap. 9 — Condições de vida, jornada, acidentes, alimentação e roupas","Bloco 9","p. 89"],
+ ["Cap. 9 — Escravidão urbana, ofícios e escravidão de ganho","Bloco 9","p. 90"],
+ ["Cap. 9 — Resistência cotidiana, insurreições e desobediência","Bloco 10","p. 92"],
+ ["Cap. 9 — Sabotagem e fugas individuais e coletivas","Bloco 10","p. 93"],
+ ["Cap. 9 — Quilombos, mocambos e o contato com o entorno","Bloco 10","p. 94"],
+ ["Cap. 9 — Quilombo dos Palmares","Bloco 10","p. 96"],
+ ["Cap. 9 — Alforria e a possibilidade de reescravização","Bloco 10","p. 100 e 104"]
+];
+
+
+/* ---------- armazenamento seguro ---------- */
+var CHAVE="dm_hist7_leitura_v1";
+var memoria={};
+function ler(){try{var s=localStorage.getItem(CHAVE);return s?JSON.parse(s):null;}catch(e){return memoria[CHAVE]||null;}}
+function gravar(o){o.quando=new Date().toISOString();try{localStorage.setItem(CHAVE,JSON.stringify(o));}catch(e){memoria[CHAVE]=o;}mostrarSalvo();}
+function apagar(){try{localStorage.removeItem(CHAVE);}catch(e){}delete memoria[CHAVE];}
+var estado=ler()||{respostas:{},blocos:{},quando:null};
+function mostrarSalvo(){
+  var el=document.getElementById("saved");
+  if(!estado.quando){el.textContent="Nada salvo ainda.";return;}
+  var d=new Date(estado.quando);
+  el.textContent="Salvo automaticamente em "+d.toLocaleDateString("pt-BR")+" às "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+}
+
+/* ---------- modal (nada de alert/confirm/prompt) ---------- */
+function modal(titulo,texto,botoes,comArea,valorArea){
+  var m=document.getElementById("modal");
+  document.getElementById("mTit").textContent=titulo;
+  document.getElementById("mTxt").textContent=texto;
+  var a=document.getElementById("mArea");
+  a.style.display=comArea?"block":"none"; a.value=valorArea||"";
+  var f=document.getElementById("mFim"); f.innerHTML="";
+  botoes.forEach(function(b){
+    var x=document.createElement("button");
+    x.className="btn"+(b.primario?" primary":" ghost"); x.textContent=b.texto;
+    x.onclick=function(){ if(b.acao) b.acao(a.value); m.classList.remove("ver"); };
+    f.appendChild(x);
+  });
+  m.classList.add("ver");
+}
+
+/* ---------- anticópia ---------- */
+function normal(s){
+  return (s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+    .replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
+}
+function palavras(s){var n=normal(s);return n?n.split(" "):[];}
+function gramas(arr,n){var s={};for(var i=0;i+n<=arr.length;i++){s[arr.slice(i,i+n).join(" ")]=1;}return s;}
+/* marca as posicoes de "alvo" que pertencem a sequencias de n+ palavras tambem presentes em "fonte" */
+function marcar(alvo,fonte,n){
+  var m=new Array(alvo.length).fill(false);
+  if(alvo.length<n||fonte.length<n) return m;
+  var g=gramas(fonte,n);
+  for(var i=0;i+n<=alvo.length;i++){
+    if(g[alvo.slice(i,i+n).join(" ")]){for(var k=i;k<i+n;k++) m[k]=true;}
+  }
+  return m;
+}
+function ehTranscricao(resposta,textoBloco,enunciado){
+  var a=palavras(resposta); if(a.length<8) return false;
+  var f=palavras(textoBloco), q=palavras(enunciado);
+  /* desconta o que foi citado da propria pergunta (sequencias de 4+) */
+  var dq=marcar(a,q,4);
+  var filtrado=[]; for(var i=0;i<a.length;i++){ if(!dq[i]) filtrado.push(a[i]); }
+  if(filtrado.length<8) return false;
+  var m8=marcar(filtrado,f,8);
+  for(var j=0;j<m8.length;j++){ if(m8[j]) return true; }
+  var m5=marcar(filtrado,f,5), c=0;
+  for(var k=0;k<m5.length;k++){ if(m5[k]) c++; }
+  return (c/filtrado.length)>0.6;
+}
+
+/* ---------- montagem ---------- */
+function textoDoBloco(b){ return b.texto.join(" ").replace(/<[^>]+>/g,""); }
+
+function montar(){
+  var alvo=document.getElementById("blocos");
+  BLOCOS.forEach(function(b,idx){ alvo.appendChild(criar(b,idx)); });
+  BLOCOS.forEach(function(b,idx){ ligar(b,idx); });
+  atualizaBadges(); atualizaBarra(); atualizaRevisar();
+}
+
+function criar(b,idx){
+  var sec=document.createElement("section");
+  sec.className="bloco"; sec.id=b.id;
+  var liberado = idx===0 || (estado.blocos[BLOCOS[idx-1].id]&&estado.blocos[BLOCOS[idx-1].id].feito);
+  var h='<div class="cab"><span class="badge" id="bg-'+b.id+'" style="display:none"></span>'+
+        '<div class="etapa">'+b.etapa+'</div><h2>Bloco '+b.num+' · '+b.titulo+'</h2>'+
+        '<div class="pag">Livro, '+b.paginas+'</div></div>';
+  if(!liberado){
+    h+='<div class="cadeado">🔒 Este bloco abre depois que você conferir o bloco '+(b.num-1)+'.</div>';
+    sec.className+=" trancado"; sec.innerHTML=h; return sec;
+  }
+  h+='<div class="corpo">';
+  b.texto.forEach(function(p){ h+='<p class="tx">'+p+'</p>'; });
+  b.perguntas.forEach(function(q,i){
+    var qid=b.id+"-q"+i;
+    h+='<div class="perg" id="p-'+qid+'">'+
+       '<div class="num">PERGUNTA '+(i+1)+' DE 3</div>'+
+       '<div class="enun">'+q.enunciado+'</div>'+
+       '<textarea id="t-'+qid+'" placeholder="Escreva com as suas palavras..."></textarea>'+
+       '<div class="aviso" id="av-'+qid+'"></div>'+
+       '<div class="modelo" id="mo-'+qid+'"><div class="rot">Resposta modelo</div>'+q.modelo+'</div>'+
+       '<div class="chk" id="ck-'+qid+'"><div class="rot">Confira a sua resposta</div></div>'+
+       '</div>';
+  });
+  h+='<div class="acoes"><button class="btn primary" id="cf-'+b.id+'" disabled>Conferir bloco '+b.num+'</button>'+
+     '<span class="dica" id="dc-'+b.id+'">Responda as 3 perguntas para liberar.</span></div></div>';
+  sec.innerHTML=h;
+  return sec;
+}
+
+function ligar(b,idx){
+  var bt=document.getElementById("cf-"+b.id);
+  if(!bt) return; /* bloco ainda trancado */
+  b.perguntas.forEach(function(q,i){
+    var qid=b.id+"-q"+i, ta=document.getElementById("t-"+qid);
+    var r=estado.respostas[qid];
+    if(r&&r.resp) ta.value=r.resp;
+    ta.addEventListener("input",function(){
+      guardaResposta(qid,ta.value);
+      atualizaBotao(b);
+      if(estado.blocos[b.id]&&estado.blocos[b.id].feito) revisarMarcaVermelha(b,i);
+    });
+    if(estado.blocos[b.id]&&estado.blocos[b.id].feito) revelar(b,i);
+    if(r&&r.transcrita){ pintarVermelho(qid,true); avisoVermelho(qid); }
+  });
+  bt.onclick=function(){ conferir(b); };
+  atualizaBotao(b);
+}
+
+function avisoVermelho(qid){
+  var av=document.getElementById("av-"+qid); if(!av) return;
+  av.className="aviso vermelho";
+  av.innerHTML="<b>Ainda está parecida com o texto.</b> Vale como respondida, mas ficou marcada para revisar. Se reescrever com as suas palavras, a marca some sozinha.";
+}
+
+function guardaResposta(qid,v){
+  if(!estado.respostas[qid]) estado.respostas[qid]={resp:"",transcrita:false,tentou:null,chk:{}};
+  estado.respostas[qid].resp=v; gravar(estado);
+}
+function preenchida(qid){ var r=estado.respostas[qid]; return r&&r.resp&&r.resp.trim().length>=3; }
+function atualizaBotao(b){
+  var ok=b.perguntas.every(function(q,i){ return preenchida(b.id+"-q"+i); });
+  var bt=document.getElementById("cf-"+b.id); if(!bt) return;
+  bt.disabled=!ok;
+  var dc=document.getElementById("dc-"+b.id);
+  if(estado.blocos[b.id]&&estado.blocos[b.id].feito){ bt.textContent="Conferido ✓"; dc.textContent="Você já conferiu este bloco. Pode continuar ajustando as respostas."; }
+  else dc.textContent= ok ? "Pronto! Pode conferir." : "Responda as 3 perguntas para liberar.";
+}
+
+function conferir(b){
+  var pendente=false;
+  b.perguntas.forEach(function(q,i){
+    var qid=b.id+"-q"+i, r=estado.respostas[qid];
+    var av=document.getElementById("av-"+qid);
+    var copiou=ehTranscricao(r.resp,textoDoBloco(b),q.enunciado);
+    if(!copiou){ r.transcrita=false; r.tentou=null; av.className="aviso"; av.textContent=""; pintarVermelho(qid,false); return; }
+    if(!r.tentou){
+      r.tentou=r.resp; pendente=true;
+      av.className="aviso amarelo";
+      av.innerHTML="<b>Quase lá.</b> Boa parte da sua resposta está igual ao texto. Tente reescrever com as suas palavras — explique como se fosse para um amigo, sem olhar o texto. Pode ficar mais curto e simples, o que vale é ser SEU.";
+      return;
+    }
+    if(r.tentou===r.resp){
+      pendente=true;
+      av.className="aviso amarelo";
+      av.innerHTML="<b>A resposta continua a mesma.</b> Altere alguma coisa com as suas palavras para conferir de novo.";
+      return;
+    }
+    r.transcrita=true; r.tentou=null;
+    avisoVermelho(qid); pintarVermelho(qid,true);
+  });
+  gravar(estado);
+  if(pendente){ atualizaBarra(); atualizaRevisar(); return; }
+  estado.blocos[b.id]={feito:true,quando:new Date().toISOString()};
+  gravar(estado);
+  b.perguntas.forEach(function(q,i){ revelar(b,i); });
+  atualizaBotao(b); atualizaBadges(); atualizaBarra(); atualizaRevisar(); abrirProximo(b);
+}
+
+function pintarVermelho(qid,on){
+  var el=document.getElementById("p-"+qid); if(!el) return;
+  if(on) el.classList.add("vermelha"); else el.classList.remove("vermelha");
+}
+function revisarMarcaVermelha(b,i){
+  var qid=b.id+"-q"+i, r=estado.respostas[qid], q=b.perguntas[i];
+  if(!r) return;
+  var copiou=ehTranscricao(r.resp,textoDoBloco(b),q.enunciado);
+  if(r.transcrita&&!copiou){
+    r.transcrita=false; gravar(estado); pintarVermelho(qid,false);
+    var av=document.getElementById("av-"+qid); av.className="aviso"; av.textContent="";
+    atualizaBadges(); atualizaRevisar();
+  }
+}
+
+function revelar(b,i){
+  var qid=b.id+"-q"+i, q=b.perguntas[i];
+  document.getElementById("mo-"+qid).classList.add("ver");
+  var ck=document.getElementById("ck-"+qid);
+  if(ck.dataset.pronto!=="1"){
+    q.chk.forEach(function(t,j){
+      var div=document.createElement("div"); div.className="item";
+      div.innerHTML='<span>'+t+'</span><span class="opts">'+
+        '<button class="mini sim" data-q="'+qid+'" data-i="'+j+'" data-v="sim">Sim</button>'+
+        '<button class="mini nao" data-q="'+qid+'" data-i="'+j+'" data-v="nao">Não</button></span>';
+      ck.appendChild(div);
+    });
+    ck.dataset.pronto="1";
+    ck.querySelectorAll(".mini").forEach(function(bt){
+      bt.onclick=function(){
+        var qq=bt.dataset.q, ii=bt.dataset.i, vv=bt.dataset.v;
+        if(!estado.respostas[qq].chk) estado.respostas[qq].chk={};
+        estado.respostas[qq].chk[ii]=vv; gravar(estado);
+        pintarChk(qq); atualizaBadges(); atualizaRevisar();
+      };
+    });
+  }
+  ck.classList.add("ver"); pintarChk(qid);
+}
+function pintarChk(qid){
+  var ck=document.getElementById("ck-"+qid); if(!ck) return;
+  var marcas=(estado.respostas[qid]&&estado.respostas[qid].chk)||{};
+  ck.querySelectorAll(".mini").forEach(function(bt){
+    bt.classList.toggle("on", marcas[bt.dataset.i]===bt.dataset.v);
+  });
+}
+
+function statusBloco(b){
+  if(!(estado.blocos[b.id]&&estado.blocos[b.id].feito)) return null;
+  var ok=true;
+  b.perguntas.forEach(function(q,i){
+    var qid=b.id+"-q"+i, r=estado.respostas[qid]||{};
+    if(r.transcrita) ok=false;
+    q.chk.forEach(function(t,j){ if((r.chk||{})[j]!=="sim") ok=false; });
+  });
+  return ok?"ok":"rev";
+}
+function atualizaBadges(){
+  BLOCOS.forEach(function(b){
+    var el=document.getElementById("bg-"+b.id); if(!el) return;
+    var s=statusBloco(b);
+    if(!s){el.style.display="none";return;}
+    el.style.display="inline-block";
+    el.className="badge "+(s==="ok"?"ok":"rev");
+    el.textContent=(s==="ok"?"✅ tudo certo":"🔁 revisar");
+  });
+}
+function atualizaBarra(){
+  var f=BLOCOS.filter(function(b){return estado.blocos[b.id]&&estado.blocos[b.id].feito;}).length;
+  document.getElementById("barra").style.width=Math.round(f/BLOCOS.length*100)+"%";
+}
+function atualizaRevisar(){
+  var itens=[];
+  BLOCOS.forEach(function(b){
+    if(!(estado.blocos[b.id]&&estado.blocos[b.id].feito)) return;
+    b.perguntas.forEach(function(q,i){
+      var r=estado.respostas[b.id+"-q"+i]||{}, motivos=[];
+      if(r.transcrita) motivos.push("resposta muito parecida com o texto");
+      var faltou=[]; q.chk.forEach(function(t,j){ if((r.chk||{})[j]==="nao") faltou.push(t); });
+      if(faltou.length) motivos.push("faltou: "+faltou.join(" / "));
+      if(motivos.length) itens.push("<b>Bloco "+b.num+", pergunta "+(i+1)+"</b> — "+motivos.join("; "));
+    });
+  });
+  var box=document.getElementById("boxRevisar"), ul=document.getElementById("listaRevisar");
+  ul.innerHTML=itens.map(function(t){return "<li>"+t+"</li>";}).join("");
+  box.style.display=itens.length?"block":"none";
+}
+function abrirProximo(b){
+  var i=BLOCOS.indexOf(b);
+  if(i>=BLOCOS.length-1) return;
+  var prox=BLOCOS[i+1];
+  var velho=document.getElementById(prox.id);
+  if(!velho||!velho.classList.contains("trancado")) return;
+  var novo=criar(prox,i+1);
+  velho.parentNode.replaceChild(novo,velho);
+  ligar(prox,i+1); atualizaBadges();
+  novo.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* ---------- extras ---------- */
+document.getElementById("pegadinhas").innerHTML=PEGADINHAS.map(function(t){return "<li>"+t+"</li>";}).join("");
+document.getElementById("cobertura").innerHTML=COBERTURA.map(function(l){
+  return "<tr><td>"+l[0]+"</td><td>"+l[1]+"</td><td>"+l[2]+"</td></tr>";}).join("");
+
+document.getElementById("bExp").onclick=function(){
+  var saida={material:"Leitura Guiada",kit:"Dentes da Moenda — História 7º ano, cap. 08 e 09",
+    quando:estado.quando,blocos:{},respostas:{}};
+  BLOCOS.forEach(function(b){
+    saida.blocos[b.id]={titulo:b.titulo,feito:!!(estado.blocos[b.id]&&estado.blocos[b.id].feito),status:statusBloco(b)};
+    b.perguntas.forEach(function(q,i){
+      var qid=b.id+"-q"+i,r=estado.respostas[qid]||{};
+      saida.respostas[qid]={pergunta:q.enunciado,resp:r.resp||"",transcrita:!!r.transcrita,
+        tentou:r.tentou||null,chk:r.chk||{},feito:!!(estado.blocos[b.id]&&estado.blocos[b.id].feito),quando:(estado.blocos[b.id]||{}).quando||null};
+    });
+  });
+  var txt=JSON.stringify(saida,null,2);
+  modal("📥 Exportar progresso","Copie o conteúdo abaixo e guarde num arquivo .json, ou use o botão para baixar.",
+    [{texto:"Baixar arquivo",primario:true,acao:function(){
+        var a=document.createElement("a");
+        a.href=URL.createObjectURL(new Blob([txt],{type:"application/json"}));
+        a.download="leitura_dentes_da_moenda.json"; a.click();
+      }},{texto:"Fechar"}],true,txt);
+};
+document.getElementById("bImp").onclick=function(){
+  modal("📤 Importar progresso","Cole aqui o conteúdo do arquivo .json que você exportou antes.",
+    [{texto:"Importar",primario:true,acao:function(v){
+      try{
+        var o=JSON.parse(v); var novo={respostas:{},blocos:{},quando:null};
+        Object.keys(o.respostas||{}).forEach(function(k){
+          novo.respostas[k]={resp:o.respostas[k].resp||"",transcrita:!!o.respostas[k].transcrita,
+            tentou:o.respostas[k].tentou||null,chk:o.respostas[k].chk||{}};
+        });
+        Object.keys(o.blocos||{}).forEach(function(k){ if(o.blocos[k].feito) novo.blocos[k]={feito:true,quando:o.quando}; });
+        estado=novo; gravar(estado); location.reload();
+      }catch(e){ modal("Não deu certo","O texto colado não parece um arquivo de progresso válido. Tente copiar de novo.",[{texto:"Ok",primario:true}]); }
+    }},{texto:"Cancelar"}],true,"");
+};
+document.getElementById("bZero").onclick=function(){
+  modal("🗑️ Zerar tudo","Isso apaga todas as respostas desta Leitura Guiada neste aparelho. Não dá para desfazer.",
+   [{texto:"Sim, zerar",primario:true,acao:function(){apagar();estado={respostas:{},blocos:{},quando:null};location.reload();}},
+    {texto:"Cancelar"}]);
+};
+
+montar(); mostrarSalvo();
+</script>
+</body>
+</html>

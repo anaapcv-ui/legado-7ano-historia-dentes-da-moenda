@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resumo · Dentes da Moenda</title>
+<style>
+:root{--fumaca:#141A1C;--carvao:#1B2326;--carvao2:#25302F;--borda:#38474A;--brasa:#5FA8D6;--brasa2:#93CDEB;
+--melaco:#8FD37E;--cana:#6FD15C;--tijolo:#E05A50;--alerta:#E8C06A;--areia:#EDF2EF;--areia2:#A9BAB6;
+--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--fumaca);color:var(--areia);font-family:var(--sans);line-height:1.6;font-size:17px}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px 80px}
+header.top{background:linear-gradient(160deg,#16303D,#121A1C 72%);border-bottom:3px solid var(--brasa);padding:26px 0 20px}
+header.top .wrap{padding-bottom:0}
+.kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--melaco);font-weight:700}
+h1{font-family:var(--serif);font-size:30px;line-height:1.15;margin:8px 0 6px}
+.sub{color:var(--areia2);font-size:15px;margin:0}
+.navbar{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0;list-style:none}
+.navbar a{display:inline-block;padding:7px 13px;border-radius:999px;border:1px solid var(--borda);
+ background:var(--carvao);color:var(--areia2);text-decoration:none;font-size:13px;font-weight:600}
+.navbar a.on{background:var(--brasa);color:#0E1A1E;border-color:var(--brasa)}
+.progresso{height:9px;background:#22303a;border-radius:999px;overflow:hidden;margin:14px 0 0}
+.progresso i{display:block;height:100%;background:linear-gradient(90deg,var(--brasa),var(--melaco));width:0%;transition:width .25s}
+.painel{background:var(--carvao);border:1px solid var(--borda);border-radius:14px;padding:14px;margin:20px 0;
+ display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.painel .saved{font-size:13px;color:var(--areia2)}
+.btn{cursor:pointer;border-radius:10px;border:1px solid var(--borda);background:var(--carvao2);color:var(--areia);
+ padding:9px 14px;font-size:14px;font-weight:600;font-family:inherit}
+.btn:hover{border-color:var(--brasa)}
+.btn.primary{background:var(--brasa);color:#0E1A1E;border-color:var(--brasa)}
+.btn.ghost{background:transparent}
+h2.sec{font-family:var(--serif);font-size:23px;margin:34px 0 4px;color:var(--brasa2)}
+h2.sec small{display:block;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--melaco);font-weight:700}
+.caixa{background:var(--carvao);border:1px solid var(--borda);border-radius:16px;padding:18px;margin:14px 0}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.ficha{background:var(--carvao2);border:1px solid var(--borda);border-left:4px solid var(--brasa);border-radius:12px;padding:14px}
+.ficha h4{margin:0 0 6px;font-size:16px;color:var(--brasa2)}
+.ficha p{margin:0;font-size:14.5px;color:var(--areia)}
+.ficha.verde{border-left-color:var(--cana)}.ficha.ouro{border-left-color:var(--melaco)}.ficha.tijolo{border-left-color:var(--tijolo)}
+/* cartas */
+.cartas{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:13px;align-items:stretch}
+.carta{perspective:1200px;cursor:pointer;min-height:190px;display:grid}
+.carta .in{display:grid;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.carta.virada .in{transform:rotateY(180deg)}
+.carta .fr,.carta .vs{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+ border-radius:14px;padding:15px;border:1px solid var(--borda);display:flex;flex-direction:column;justify-content:center}
+.carta .fr{background:linear-gradient(150deg,#233334,#17201F);text-align:center}
+.carta .fr .ico{font-size:30px;margin-bottom:6px}
+.carta .fr h4{margin:0;font-family:var(--serif);font-size:19px;color:var(--brasa2)}
+.carta .fr .dica{margin-top:8px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--areia2)}
+.carta .vs{display:block;background:#121A1C;transform:rotateY(180deg);font-size:14.2px;line-height:1.5}
+.carta .vs b{color:var(--melaco)}
+/* linha do tempo */
+.tl{position:relative;padding-left:26px;margin:6px 0 0}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--brasa),var(--melaco))}
+.tl .ev{position:relative;padding:11px 0 11px 10px}
+.tl .ev::before{content:"";position:absolute;left:-23px;top:17px;width:11px;height:11px;border-radius:50%;
+ background:var(--brasa);border:2px solid var(--fumaca)}
+.tl .ano{font-weight:800;color:var(--melaco);font-size:15px}
+.tl .txt{font-size:14.7px}
+/* piramide */
+.pir{display:flex;flex-direction:column;align-items:center;gap:6px;margin:4px 0 0}
+.pir div{text-align:center;padding:12px 14px;border-radius:10px;font-size:14.5px;border:1px solid var(--borda)}
+.pir .t{width:62%;background:rgba(143,211,126,.16);border-color:var(--melaco)}
+.pir .m{width:81%;background:rgba(95,168,214,.13);border-color:var(--brasa)}
+.pir .b{width:100%;background:rgba(169,186,182,.10)}
+.pir b{display:block;font-family:var(--serif);font-size:17px;margin-bottom:3px}
+/* tabela comparativa */
+.rolat{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
+.rolat .hint{display:none;font-size:12px;color:var(--areia2);margin-bottom:7px}
+table.cmp{width:100%;border-collapse:collapse;font-size:14.3px}
+table.cmp th,table.cmp td{padding:9px 8px;border:1px solid #2c3839;vertical-align:top;text-align:left}
+table.cmp thead th{background:var(--carvao2);color:var(--melaco);font-size:12px;letter-spacing:.07em;text-transform:uppercase}
+table.cmp tbody th{background:#191410;color:var(--brasa2);font-weight:700;width:140px}
+/* post-its */
+.posts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:13px}
+.post{background:#F5D97A;color:#2B2008;border-radius:4px;padding:14px;font-size:14.3px;line-height:1.45;
+ box-shadow:0 6px 14px rgba(0,0,0,.35);transform:rotate(-.7deg)}
+.post:nth-child(even){transform:rotate(.8deg);background:#F2C75E}
+.post b{display:block;margin-bottom:5px;font-size:12px;letter-spacing:.09em;text-transform:uppercase}
+/* glossario */
+dl.glo{margin:0}
+dl.glo dt{font-weight:800;color:var(--brasa2);margin-top:12px;font-size:15.5px}
+dl.glo dd{margin:3px 0 0;font-size:14.6px;color:var(--areia)}
+.simnao{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.simnao .c{border-radius:12px;padding:14px;font-size:14.5px}
+.simnao .sim{background:rgba(111,209,92,.10);border:1px solid var(--cana)}
+.simnao .nao{background:rgba(224,90,80,.10);border:1px solid var(--tijolo)}
+.simnao h4{margin:0 0 8px;font-size:15px}
+.simnao .sim h4{color:var(--cana)}.simnao .nao h4{color:var(--tijolo)}
+.simnao ul{margin:0;padding-left:18px}.simnao li{margin:5px 0}
+.fecho{text-align:center;margin:34px 0 0}
+.rodape{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:26px;
+ padding-top:18px;border-top:1px solid var(--borda);font-size:14px;color:var(--areia2)}
+.rodape a{color:var(--brasa);text-decoration:none;font-weight:700}
+.modal{position:fixed;inset:0;background:rgba(6,10,12,.84);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal.ver{display:flex}
+.modal .cx{background:var(--carvao);border:1px solid var(--borda);border-radius:16px;max-width:520px;width:100%;padding:20px}
+.modal h3{font-family:var(--serif);margin:0 0 8px;font-size:20px}
+.modal p{font-size:15px;color:var(--areia2)}
+.modal textarea{width:100%;min-height:110px;background:#121A1C;color:var(--areia);border:1px solid var(--borda);
+ border-radius:10px;padding:10px;font-family:inherit;font-size:13px}
+.modal .fim{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+@media(max-width:700px){table.cmp{min-width:560px}.rolat .hint{display:block}}
+@media(max-width:600px){h1{font-size:24px}body{font-size:16px}.simnao{grid-template-columns:1fr}
+ table.cmp tbody th{width:110px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+ <div class="kicker">Dentes da Moenda · História · 7º ano</div>
+ <h1>🗺️ Resumo</h1>
+ <p class="sub">Tudo o que cai na prova dos capítulos 08 e 09, em blocos curtos para revisar na véspera</p>
+ <ul class="navbar">
+  <li><a href="leitura.html">1 · 📖 Leitura Guiada</a></li>
+  <li><a href="quiz.html">2 · 🎯 Quiz</a></li>
+  <li><a class="on" href="resumo.html">3 · 🗺️ Resumo</a></li>
+  <li><a href="simulado.html">4 · 📝 Simulado</a></li>
+  <li><a href="index.html">🏠 Início</a></li>
+ </ul>
+ <div class="progresso"><i id="barra"></i></div>
+</div></header>
+
+<div class="wrap">
+ <div class="painel">
+  <div class="saved" id="saved">Nada salvo ainda.</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+   <button class="btn ghost" id="bExp">📥 Exportar</button>
+   <button class="btn ghost" id="bImp">📤 Importar</button>
+   <button class="btn ghost" id="bZero">🗑️ Zerar tudo</button>
+  </div>
+ </div>
+
+ <h2 class="sec"><small>Capítulo 08 · ponto de partida</small>Por que o açúcar: os 4 fatores</h2>
+ <div class="caixa"><div class="grade">
+  <div class="ficha"><h4>💰 Demanda europeia</h4><p>O açúcar era produto de luxo e tinha grande procura na Europa. O alto custo de produção era compensado pelo <b>alto preço de revenda</b>.</p></div>
+  <div class="ficha"><h4>🗺️ Geografia</h4><p>Os rios facilitavam o escoamento até os portos do litoral nordestino, principalmente <b>Pernambuco e Bahia</b>. A proximidade com a Europa encurtava as viagens.</p></div>
+  <div class="ficha"><h4>🌱 Condições naturais</h4><p>Solo <b>massapê</b> e clima úmido e quente do litoral do Nordeste e do Sudeste, ideais para a canavicultura.</p></div>
+  <div class="ficha"><h4>⚓ Experiência anterior</h4><p>Quase um século de canavicultura nas Ilhas da <b>Madeira, Açores e Cabo Verde</b>: os portugueses já tinham técnica e experiência.</p></div>
+ </div></div>
+
+ <h2 class="sec"><small>Capítulos 08 e 09</small>Linha do tempo da prova</h2>
+ <div class="caixa"><div class="tl">
+  <div class="ev"><div class="ano">1532</div><div class="txt">Primeiro engenho de açúcar, na capitania de <b>São Vicente</b>, organizado pelo capitão donatário Martim Afonso de Sousa.</div></div>
+  <div class="ev"><div class="ano">A partir de 1530</div><div class="txt">Começa a escravização dos nativos. Os portugueses chamavam os indígenas de «negros da terra», «negros brasis» e «brasileiros».</div></div>
+  <div class="ev"><div class="ano">1549</div><div class="txt">Chegada dos <b>primeiros jesuítas</b>. O modo como a escravização indígena era praticada passa a ser questionado; surgem as <b>Aldeias Reais</b>.</div></div>
+  <div class="ev"><div class="ano">1570</div><div class="txt"><b>Lei de 1570</b>: garante o direito de liberdade aos indígenas e limita a escravização aos casos de «guerra justa», com autorização do rei ou do Governador-Geral.</div></div>
+  <div class="ev"><div class="ano">1574</div><div class="txt"><b>Reformulação da lei de 1570</b>: regula o cativeiro ilegal e coloca os indígenas sob tutela dos jesuítas.</div></div>
+  <div class="ev"><div class="ano">1574 → 1638</div><div class="txt">No engenho Sergipe do Conde (BA), os africanos passam de <b>7%</b> da força de trabalho escrava (1574) a <b>37%</b> (1591) e à <b>totalidade</b> (por volta de 1638).</div></div>
+  <div class="ev"><div class="ano">1580</div><div class="txt">Mais de <b>100 engenhos</b> no litoral, produzindo <b>350 mil arrobas</b> (cerca de 5 250 toneladas) de açúcar por ano. Pernambuco com 66 e Bahia com 36.</div></div>
+  <div class="ev"><div class="ano">Fim do séc. XVI → séc. XVII</div><div class="txt">Surgem e se tornam muito atuantes as <b>bandeiras</b>, expedições que partiam do litoral para o interior atrás de metais, pedras preciosas e indígenas.</div></div>
+  <div class="ev"><div class="ano">1609</div><div class="txt"><b>Lei de 1609</b>: a liberdade dos índios deve ser garantida pelo tribunal e todos devem ser pagos pelo seu trabalho. Mantém os aldeamentos jesuítas, com um magistrado para julgar disputas.</div></div>
+  <div class="ev"><div class="ano">Séc. XVII (quase 100 anos)</div><div class="txt"><b>Quilombo dos Palmares</b>, na Serra da Barriga (atual Alagoas), resiste a várias tentativas da Coroa de destruí-lo.</div></div>
+  <div class="ev"><div class="ano">Séc. XVIII</div><div class="txt">Os paulistas ainda aprisionam e vendem indígenas no planalto de Piratininga. O ciclo do açúcar vai até esse século.</div></div>
+  <div class="ev"><div class="ano">1888</div><div class="txt">Abolição da escravidão no Brasil.</div></div>
+ </div></div>
+
+ <h2 class="sec"><small>Toque para virar</small>12 cartas para decorar</h2>
+ <div class="cartas" id="cartas"></div>
+
+ <h2 class="sec"><small>Capítulo 08 · p. 46</small>Os quatro espaços do engenho</h2>
+ <div class="caixa"><div class="grade">
+  <div class="ficha ouro"><h4>🏛️ Casa-grande</h4><p>Residência do senhor, da família, dos agregados e dos subordinados. Também era o <b>centro administrativo</b> do engenho.</p></div>
+  <div class="ficha tijolo"><h4>⛓️ Senzala</h4><p>Local onde os escravizados eram <b>aprisionados</b>, em péssimas condições de higiene, para as poucas horas de repouso a que tinham direito.</p></div>
+  <div class="ficha verde"><h4>⛪ Capela</h4><p>Missas, batismos, casamentos e enterros. Importante <b>centro de convívio</b>, principalmente aos domingos e dias santos.</p></div>
+  <div class="ficha"><h4>🔥 Casa de engenho</h4><p>Onde o açúcar era preparado: <b>casa da moenda, fornalhas e casa de purgar</b>. É a parte agroindustrial da propriedade.</p></div>
+ </div></div>
+
+ <h2 class="sec"><small>Capítulo 08 · p. 53</small>A pirâmide da sociedade colonial</h2>
+ <div class="caixa"><div class="pir">
+  <div class="t"><b>Senhores de engenho</b>Homens brancos, proprietários de engenhos e de escravizados. <b style="display:inline;color:var(--melaco)">Minoria</b> da população.</div>
+  <div class="m"><b>Classe intermediária</b>Mestiços, funcionários domésticos do engenho, políticos locais, feitores (capatazes), fazendeiros com propriedades menores, comerciantes e artesãos.</div>
+  <div class="b"><b>Escravizados</b>Em sua maioria africanos negros e, ocasionalmente, indígenas. <b style="display:inline;color:var(--brasa2)">Maioria</b> da população.</div>
+ </div>
+ <p style="font-size:14.5px;margin:14px 0 0"><b style="color:var(--melaco)">A única porta de subida:</b> os comerciantes de escravizados enriquecidos do Rio de Janeiro e de Salvador ascenderam social e politicamente e conquistaram grande participação nas <b>Câmaras Municipais</b>. Fora deles, a sociedade colonial <b>não permitia mobilidade social</b>.</p></div>
+
+ <h2 class="sec"><small>Capítulo 09 · p. 78</small>Como os indígenas eram capturados</h2>
+ <div class="caixa"><div class="rolat"><div class="hint">↔ arraste a tabela para o lado para ver todas as colunas</div><table class="cmp">
+  <thead><tr><th></th><th>Como funcionava</th><th>Quem fazia</th><th>Como não confundir</th></tr></thead>
+  <tbody>
+   <tr><th>Guerra justa</th><td>Praticada contra indígenas que resistissem à conversão católica ou atacassem colonos. Os colonos ficavam autorizados a invadir territórios e capturá-los; os capturados podiam ser vendidos à Coroa ou a religiosos.</td><td>Colonos, com autorização do rei ou do Governador-Geral</td><td>É a única que depende de <b>autorização legal</b> e nasce de um conflito.</td></tr>
+   <tr><th>Resgate</th><td>Uma população indígena entregava aos colonizadores nativos capturados que seriam submetidos a rituais antropofágicos, recebendo em troca produtos europeus: miçangas, ferramentas, adornos e armas.</td><td>Colonizadores, em acordo com um grupo indígena</td><td>É a única em que há <b>troca por mercadorias</b>.</td></tr>
+   <tr><th>Descimento</th><td>Missionários visitavam pacificamente as aldeias e convenciam os nativos a «descer» para viver em aldeamentos religiosos, abandonando costumes, crenças e modo de vida.</td><td>Missionários</td><td>É a única feita por <b>convencimento</b>, sem violência direta — mas com perda da identidade.</td></tr>
+  </tbody></table></div></div>
+
+ <h2 class="sec"><small>Capítulo 09 · p. 92 e 93</small>As formas de resistência</h2>
+ <div class="caixa"><div class="grade">
+  <div class="ficha"><h4>🌾 Resistência cotidiana</h4><p>Pequenos atos de rebeldia, furtos, algazarras, fugas temporárias, preservação de arranjos familiares, tradições afro-brasileiras e festividades africanas.</p></div>
+  <div class="ficha tijolo"><h4>✊ Insurreições</h4><p>Revoltas. <b>Não eram tão frequentes</b> quanto os quilombos ou a fuga. Exigiam a devolução de direitos retirados pelos senhores ou mostravam a insatisfação contra senhores e feitores.</p></div>
+  <div class="ficha ouro"><h4>🙅 Desobediência</h4><p>O senhor dependia da obediência e da disciplina. Deixar de executar tarefas ou executá-las apenas parcialmente <b>retirava do senhor parte de sua autoridade</b>.</p></div>
+  <div class="ficha"><h4>🔧 Sabotagem</h4><p>Quebrar ferramentas, incendiar parte da lavoura, danificar um dente do cilindro da moenda, deixar um <b>limão cortado</b> nos tachos do caldo de cana. Causava grande prejuízo.</p></div>
+  <div class="ficha verde"><h4>🌙 Fuga</h4><p>Individual ou coletiva (as coletivas eram mais comuns). Buscava melhores condições, conservar direitos já adquiridos ou romper com a dominação. Era comum ser anunciada em jornais, com características físicas e promessa de recompensa.</p></div>
+  <div class="ficha verde"><h4>🏡 Quilombo</h4><p>Resultado das fugas coletivas: povoações em regiões de difícil acesso, também chamadas de <b>mocambos</b>, com centenas ou milhares de pessoas.</p></div>
+ </div></div>
+
+ <h2 class="sec"><small>Capítulo 09 · p. 94 e 96</small>Quilombos: o que é e o que NÃO é</h2>
+ <div class="caixa"><div class="simnao">
+  <div class="c sim"><h4>✅ O que o livro afirma</h4><ul>
+   <li>Eram povoações em regiões de difícil acesso, também chamadas de mocambos.</li>
+   <li>Podiam reunir <b>centenas ou milhares</b> de pessoas.</li>
+   <li>Além dos fugidos, também reuniam indígenas, comerciantes, soldados desertores e procurados pela justiça.</li>
+   <li>Comerciavam com vilas e cidades próximas e recolhiam informações sobre o avanço de tropas.</li>
+   <li>O objetivo era <b>viver livremente no interior</b> deles.</li>
+   <li>Palmares: começou com cerca de 40 pessoas, chegou a <b>20 mil habitantes</b>, tinha leis, governo, defesa militar e tradições religiosas próprias, e resistiu por quase cem anos na Serra da Barriga (atual Alagoas).</li>
+  </ul></div>
+  <div class="c nao"><h4>❌ O que a prova tenta te fazer dizer</h4><ul>
+   <li>Que eram <b>completamente isolados</b> do mundo ao redor.</li>
+   <li>Que o objetivo era <b>acabar com a escravidão</b> em toda a colônia.</li>
+   <li>Que eram formados <b>só</b> por africanos fugidos.</li>
+   <li>Que eram acampamentos pequenos e temporários.</li>
+   <li>Que Palmares foi destruído logo no primeiro ataque.</li>
+   <li>Que ficavam no litoral da Bahia.</li>
+  </ul></div>
+ </div></div>
+
+ <h2 class="sec"><small>Capítulo 09 · p. 89 e 90</small>Vida e trabalho: campo e cidade</h2>
+ <div class="caixa"><div class="rolat"><div class="hint">↔ arraste a tabela para o lado para ver todas as colunas</div><table class="cmp">
+  <thead><tr><th></th><th>No campo (engenho)</th><th>Na cidade</th></tr></thead>
+  <tbody>
+   <tr><th>Jornada</th><td>Podia chegar a <b>mais de vinte horas por dia</b>.</td><td>Longas jornadas na escravidão de ganho, por causa do valor elevado cobrado pelo senhor.</td></tr>
+   <tr><th>Riscos</th><td>Acidentes frequentes: perda de uma das mãos ou até de um braço na <b>moenda</b>. Caldeiras ferventes descritas como «semelhança de inferno».</td><td>Menos vigiados, circulavam pelas ruas dos centros urbanos.</td></tr>
+   <tr><th>Ofícios</th><td>Lavoura e beneficiamento da cana.</td><td>Carpinteiros, alfaiates, ferreiros, carroceiros, barbeiros, pedreiros, pintores, estivadores, costureiros, escultores, músicos; mulheres como cozinheiras, amas, lavadeiras, domésticas ou vendedoras de doces, bolos, caldo de cana e mingaus.</td></tr>
+   <tr><th>Alimentação e roupa</th><td>Alimentação precária; aos domingos deviam plantar para o próprio sustento. Tecidos grosseiros.</td><td>Escravizados domésticos andavam mais bem vestidos, com colete e chapéu.</td></tr>
+   <tr><th>Modalidade</th><td>Trabalho direto para o senhor.</td><td><b>Escravidão de ganho</b>: exercia atividade que gerava ganho e entregava parte ao senhor ao fim da jornada. Em Minas Gerais, as «negras de tabuleiro».</td></tr>
+  </tbody></table></div>
+  <p style="font-size:14.5px;margin:14px 0 0"><b style="color:var(--melaco)">Detalhe que cai:</b> possuir escravizados não era privilégio só de grandes proprietários. Como o trabalho braçal carregava significado negativo e ter cativos dava <i>status</i>, comerciantes, militares, artesãos, pequenos lavradores, funcionários públicos, donos de tabernas e <b>até libertos</b> possuíam escravizados.</p></div>
+
+ <h2 class="sec"><small>Alertas</small>Post-its de pegadinha</h2>
+ <div class="posts">
+  <div class="post"><b>Produzir ≠ lucrar</b>O açúcar era feito na colônia, mas quem refinava, transportava e vendia eram os comerciantes holandeses — e só a refinação rendia cerca de um terço do valor do açúcar bruto.</div>
+  <div class="post"><b>Primeiro ≠ principal</b>O primeiro engenho foi em São Vicente (1532). O principal centro açucareiro passou a ser o Nordeste, com Pernambuco (66 engenhos) e Bahia (36).</div>
+  <div class="post"><b>«Negros da terra» = indígenas</b>Era o nome que os portugueses davam aos nativos, junto com «negros brasis» e «brasileiros». Não se refere aos africanos.</div>
+  <div class="post"><b>Houve, sim, escravidão indígena</b>E foi longa: os paulistas aprisionavam e vendiam índios até o século XVIII.</div>
+  <div class="post"><b>A troca foi lenta</b>A substituição da mão de obra indígena pela africana levou cerca de meio século. Em fins do século XVI o trabalho nos engenhos ainda era misto.</div>
+  <div class="post"><b>Senzala não era moradia comum</b>Era o local onde os escravizados eram aprisionados, em péssimas condições de higiene.</div>
+  <div class="post"><b>Guerra justa tem regra</b>Não era qualquer guerra: era a permissão legal para capturar quem resistisse à conversão ou atacasse colonos, com autorização do rei ou do Governador-Geral.</div>
+  <div class="post"><b>1570 · 1574 · 1609</b>Limita a escravização → põe sob tutela dos jesuítas → declara os índios livres. Nessa ordem.</div>
+  <div class="post"><b>Lei no papel ≠ lei na prática</b>Existiam leis proibindo a escravização indígena, mas não eram respeitadas com rigor — e as bandeiras continuaram capturando nativos.</div>
+  <div class="post"><b>Quilombo: objetivo e contato</b>Não queriam acabar com a escravidão no país, queriam viver livres lá dentro. E não eram isolados: comerciavam e recolhiam informações sobre tropas.</div>
+ </div>
+
+ <h2 class="sec"><small>Vocabulário da prova</small>Glossário</h2>
+ <div class="caixa"><dl class="glo">
+  <dt>Engenho</dt><dd>Unidade produtora da economia colonial. Organizava a rotina dos moradores e a estrutura social da lavoura de cana.</dd>
+  <dt>Massapê</dt><dd>Tipo de solo do litoral, ideal para a canavicultura.</dd>
+  <dt>Arroba</dt><dd>Unidade de peso usada no período. Até 1580 a colônia produzia 350 mil arrobas de açúcar por ano, cerca de 5 250 toneladas.</dd>
+  <dt>Capitanias hereditárias</dt><dd>Vastas faixas de terra entregues a capitães donatários, que assumiam a função e os altíssimos custos da colonização.</dd>
+  <dt>Plantation</dt><dd>Forma de organizar a produção: grande propriedade, monocultura, mão de obra escravizada e produção voltada à exportação.</dd>
+  <dt>Casa de purgar</dt><dd>Instalação da casa de engenho onde o açúcar passava por uma das etapas finais do preparo.</dd>
+  <dt>Aldeias Reais</dt><dd>Espaços criados pela Coroa, próximos às áreas produtivas, administrados por religiosos, que serviam como depósito de mão de obra indígena.</dd>
+  <dt>Bandeiras</dt><dd>Expedições que reuniam colonos e partiam do litoral para o interior em busca de metais e pedras preciosas ou de indígenas.</dd>
+  <dt>Escravidão de ganho</dt><dd>Modalidade urbana em que o cativo exercia atividade remunerada e entregava parte do ganho ao senhor ao fim da jornada.</dd>
+  <dt>Alforria</dt><dd>Carta de libertação. Mesmo depois de forro, o antigo cativo andava com o registro de sua carta pelo resto da vida, pois havia a possibilidade de ser escravizado novamente.</dd>
+  <dt>Quilombo (ou mocambo)</dt><dd>Povoação construída em região de difícil acesso por quem escapava das senzalas.</dd>
+  <dt>Quilombola</dt><dd>Morador de um quilombo.</dd>
+ </dl></div>
+
+ <div class="fecho">
+  <button class="btn primary" style="font-size:16px;padding:14px 22px" id="bSim">Agora vale nota: ir para o 📝 Simulado →</button>
+ </div>
+
+ <div class="rodape">
+  <span>Leu o Resumo inteiro? O Simulado é o último material do kit.</span>
+  <a href="simulado.html">📝 Simulado</a>
+ </div>
+</div>
+
+<div class="modal" id="modal"><div class="cx">
+ <h3 id="mTit"></h3><p id="mTxt"></p>
+ <textarea id="mArea" style="display:none"></textarea>
+ <div class="fim" id="mFim"></div>
+</div></div>
+
+<script>
+var CARTAS=[
+ {ico:"🍬",t:"Por que o açúcar?",v:"Não acharam ouro nem prata. O açúcar era <b>produto de luxo</b> com grande procura na Europa, e o alto preço de revenda compensava o alto custo de produção."},
+ {ico:"🇳🇱",t:"O papel dos holandeses",v:"Arcaram com custos da implantação e ficaram com <b>refino, transporte, comércio e distribuição</b>. Eram experientes e tinham navios velozes — por isso grande parte do lucro foi deles."},
+ {ico:"📜",t:"Donatários e a Coroa",v:"A Coroa deu aos <b>capitães donatários</b> a função e os altíssimos custos, em forma de capitanias hereditárias. Ficou com o povoamento, a posse da terra e os <b>impostos sobre a comercialização</b>."},
+ {ico:"⚙️",t:"O que é um engenho",v:"A <b>unidade produtora</b> da economia colonial. Organizava a rotina e a estrutura social, ocupava grandes propriedades e criou uma desigualdade de terras que ainda se reflete hoje."},
+ {ico:"🏚️",t:"Os 4 espaços",v:"<b>Casa-grande</b> (moradia e administração), <b>senzala</b> (onde os escravizados eram aprisionados), <b>capela</b> (missas e convívio) e <b>casa de engenho</b> (moenda, fornalhas e casa de purgar)."},
+ {ico:"🌿",t:"«Negros da terra»",v:"Nome que os portugueses davam aos <b>indígenas</b>, junto com «negros brasis». Como trocavam pau-brasil, eram chamados também de «brasileiros»."},
+ {ico:"🛑",t:"O que travava a escravidão indígena",v:"<b>Diferença cultural</b> (agricultura de subsistência), <b>oposição dos jesuítas</b>, <b>doenças</b> trazidas pelo colonizador (como a varíola) e <b>fugas constantes</b>, facilitadas pelo conhecimento do território."},
+ {ico:"🔄",t:"Por que africanos",v:"<b>Domínio da produção</b> de açúcar por africanos, <b>lucro do comércio</b> de escravizados, <b>experiência anterior</b> dos portugueses e as <b>feitorias e colônias</b> na África, que facilitavam a compra de cativos."},
+ {ico:"⛪",t:"A Igreja como agente colonizador",v:"Fiscalizou a moral dos colonos, catequizou indígenas, manteve hospitais, fez casamentos, batizados e enterros, <b>registrou a posse das terras</b> e ensinou a cultura europeia nas escolas."},
+ {ico:"🏹",t:"Guerra justa, resgate, descimento",v:"<b>Guerra justa</b>: captura autorizada de quem resistisse à conversão ou atacasse colonos. <b>Resgate</b>: troca de cativos por miçangas, ferramentas, adornos e armas. <b>Descimento</b>: missionários convenciam os nativos a descer para os aldeamentos."},
+ {ico:"⚖️",t:"As três leis",v:"<b>1570</b>: liberdade como regra, escravização só na guerra justa com autorização do rei ou do Governador-Geral. <b>1574</b>: regula o cativeiro ilegal e põe os indígenas sob tutela dos jesuítas. <b>1609</b>: índios livres, trabalho pago, disputas julgadas por magistrado."},
+ {ico:"🔥",t:"Palmares",v:"Na Serra da Barriga (atual <b>Alagoas</b>). Começou com cerca de 40 pessoas e chegou a <b>20 mil habitantes</b> em várias comunidades. Tinha leis, governo, defesa militar e religião próprias, e resistiu por quase cem anos."}
+];
+var alvo=document.getElementById("cartas");
+CARTAS.forEach(function(c,i){
+ var d=document.createElement("div"); d.className="carta"; d.tabIndex=0;
+ d.innerHTML='<div class="in"><div class="fr"><div class="ico">'+c.ico+'</div><h4>'+c.t+'</h4>'+
+   '<div class="dica">toque para ver</div></div><div class="vs">'+c.v+'</div></div>';
+ d.onclick=function(){ d.classList.toggle("virada"); marcar("carta"+i); };
+ d.onkeydown=function(e){ if(e.key==="Enter"||e.key===" "){e.preventDefault();d.click();} };
+ alvo.appendChild(d);
+});
+
+var CHAVE="dm_hist7_resumo_v1";
+var memoria={};
+function ler(){try{var s=localStorage.getItem(CHAVE);return s?JSON.parse(s):null;}catch(e){return memoria[CHAVE]||null;}}
+function gravar(o){o.quando=new Date().toISOString();try{localStorage.setItem(CHAVE,JSON.stringify(o));}catch(e){memoria[CHAVE]=o;}mostrarSalvo();}
+function apagar(){try{localStorage.removeItem(CHAVE);}catch(e){}delete memoria[CHAVE];}
+var estado=ler()||{rolagem:0,viradas:{},quando:null};
+function mostrarSalvo(){var el=document.getElementById("saved");
+ if(!estado.quando){el.textContent="Nada salvo ainda.";return;}
+ var d=new Date(estado.quando);
+ el.textContent="Leitura do Resumo: "+estado.rolagem+"% · "+Object.keys(estado.viradas).length+" de 12 cartas abertas · salvo em "+
+   d.toLocaleDateString("pt-BR")+" às "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});}
+function marcar(k){ estado.viradas[k]=true; gravar(estado); }
+
+var timer=null, pendente=false;
+function salvarDepois(){ pendente=true; if(timer) return;
+ timer=setTimeout(function(){ timer=null; if(pendente){ pendente=false; gravar(estado); } },700); }
+function rolou(){
+ var alt=document.documentElement.scrollHeight-window.innerHeight;
+ var p=alt>0?Math.round(window.scrollY/alt*100):100;
+ if(p>100)p=100; if(p<0)p=0;
+ document.getElementById("barra").style.width=p+"%";
+ if(p>estado.rolagem){ estado.rolagem=p; salvarDepois(); }
+}
+window.addEventListener("pagehide",function(){ if(pendente){ pendente=false; gravar(estado); } });
+document.addEventListener("visibilitychange",function(){ if(document.hidden&&pendente){ pendente=false; gravar(estado); } });
+window.addEventListener("scroll",rolou,{passive:true});
+window.addEventListener("resize",rolou);
+
+function modal(t,x,bs,area,val){var m=document.getElementById("modal");
+ document.getElementById("mTit").textContent=t;document.getElementById("mTxt").textContent=x;
+ var a=document.getElementById("mArea");a.style.display=area?"block":"none";a.value=val||"";
+ var f=document.getElementById("mFim");f.innerHTML="";
+ bs.forEach(function(b){var e=document.createElement("button");e.className="btn"+(b.primario?" primary":" ghost");
+  e.textContent=b.texto;e.onclick=function(){if(b.acao)b.acao(a.value);m.classList.remove("ver");};f.appendChild(e);});
+ m.classList.add("ver");}
+
+document.getElementById("bExp").onclick=function(){
+ var txt=JSON.stringify({material:"Resumo",kit:"Dentes da Moenda — História 7º ano, cap. 08 e 09",
+  quando:estado.quando,rolagem_maxima_pct:estado.rolagem,cartas_abertas:Object.keys(estado.viradas).length,total_cartas:12},null,2);
+ modal("📥 Exportar progresso","Copie o conteúdo abaixo ou baixe o arquivo .json.",
+  [{texto:"Baixar arquivo",primario:true,acao:function(){var a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([txt],{type:"application/json"}));a.download="resumo_dentes_da_moenda.json";a.click();}},
+   {texto:"Fechar"}],true,txt);
+};
+document.getElementById("bImp").onclick=function(){
+ modal("📤 Importar progresso","Cole aqui o conteúdo do arquivo .json que você exportou antes.",
+  [{texto:"Importar",primario:true,acao:function(v){ try{ var o=JSON.parse(v);
+    estado={rolagem:o.rolagem_maxima_pct||0,viradas:{},quando:null};
+    for(var i=0;i<(o.cartas_abertas||0);i++) estado.viradas["carta"+i]=true;
+    gravar(estado); location.reload();
+   }catch(e){ modal("Não deu certo","O texto colado não parece um arquivo de progresso válido.",[{texto:"Ok",primario:true}]); } }},
+   {texto:"Cancelar"}],true,"");
+};
+document.getElementById("bZero").onclick=function(){
+ modal("🗑️ Zerar tudo","Isso apaga o progresso do Resumo neste aparelho. Não dá para desfazer.",
+  [{texto:"Sim, zerar",primario:true,acao:function(){apagar();estado={rolagem:0,viradas:{},quando:null};location.reload();}},
+   {texto:"Cancelar"}]);
+};
+document.getElementById("bSim").onclick=function(){ location.href="simulado.html"; };
+
+mostrarSalvo(); rolou();
+</script>
+</body>
+</html>
